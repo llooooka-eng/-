@@ -7,6 +7,7 @@ import { Alert, Pressable, ScrollView, StyleSheet, TextInput, View } from "react
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Button, Card, Header, Screen } from "@/components/ui";
+import { useToast } from "@/components/Toast";
 import { useAuth } from "@/context/AuthContext";
 import type { SampleService } from "@/constants/sampleData";
 import { colors, fontFamily, fontSize, radius, spacing } from "@/constants/theme";
@@ -16,6 +17,7 @@ const uid = () => `svc-${Date.now().toString(36)}-${Math.random().toString(36).s
 
 export default function DashboardScreen() {
   const { adminServices, saveAdminServices } = useAuth();
+  const toast = useToast();
   const [list, setList] = useState<SampleService[]>(adminServices);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(""); // بالريال
@@ -40,9 +42,8 @@ export default function DashboardScreen() {
 
   const save = () => {
     saveAdminServices(list);
-    Alert.alert("تم الحفظ", "نُشرت الخدمات للعملاء في صفحة غرفة الحبر", [
-      { text: "حسناً", onPress: () => router.back() },
-    ]);
+    toast.show("نُشرت الخدمات للعملاء في غرفة الحبر");
+    router.back();
   };
 
   return (

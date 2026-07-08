@@ -18,6 +18,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/ibm-plex-sans-arabic";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { ToastProvider } from "@/components/Toast";
 import { colors } from "@/constants/theme";
 
 // افرض RTL مرة واحدة (يتطلب إعادة تشغيل التطبيق ليأخذ مفعوله كاملاً)
@@ -73,8 +74,10 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <StatusBar style="dark" />
-        <RootNavigator />
+        <ToastProvider>
+          <StatusBar style="dark" />
+          <RootNavigator />
+        </ToastProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );

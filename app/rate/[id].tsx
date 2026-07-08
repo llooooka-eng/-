@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Button, Chip, Header, Screen } from "@/components/ui";
+import { useToast } from "@/components/Toast";
 import { useAuth } from "@/context/AuthContext";
 import { colors, fontSize, spacing } from "@/constants/theme";
 
@@ -14,6 +15,7 @@ const TAGS = ["نظافة ممتازة", "حلاق محترف", "التزام ب
 export default function RateScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { bookings, rateBooking } = useAuth();
+  const toast = useToast();
   const booking = bookings.find((b) => b.id === id);
 
   const [stars, setStars] = useState(0);
@@ -24,6 +26,7 @@ export default function RateScreen() {
   const submit = () => {
     if (!id || stars === 0) return;
     rateBooking(id, stars, tags);
+    toast.show("شكراً لتقييمك ✨");
     router.back();
   };
 

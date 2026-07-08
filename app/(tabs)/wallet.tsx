@@ -4,8 +4,10 @@
  * مسار الخادم البديل في hooks/useWallet + services/walletService.
  */
 import { useState } from "react";
-import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, View } from "react-native";
 import { AppText, EmptyState, Screen } from "@/components/ui";
+import { BottomSheet } from "@/components/BottomSheet";
+import { useToast } from "@/components/Toast";
 import { TransactionRow, WalletBalanceCard } from "@/components/wallet";
 import { useAuth } from "@/context/AuthContext";
 import { colors, fontSize, radius, spacing } from "@/constants/theme";
@@ -16,6 +18,7 @@ const TOPUP_OPTIONS = [5000, 10000, 20000, 50000]; // بالهللة
 
 export default function WalletScreen() {
   const { wallet, topUp } = useAuth();
+  const toast = useToast();
   const [topUpOpen, setTopUpOpen] = useState(false);
 
   const renderHeader = () => (
@@ -43,33 +46,26 @@ export default function WalletScreen() {
       />
 
       {/* شحن المحفظة */}
-      <Modal visible={topUpOpen} transparent animationType="slide" onRequestClose={() => setTopUpOpen(false)}>
-        <Pressable style={styles.overlay} onPress={() => setTopUpOpen(false)}>
-          <Pressable style={styles.sheet}>
-            <View style={styles.sheetHandle} />
-            <AppText weight="semibold" style={styles.sheetTitle}>
-              اختر مبلغ الشحن
-            </AppText>
-            <View style={styles.amountsGrid}>
-              {TOPUP_OPTIONS.map((amt) => (
-                <Pressable
-                  key={amt}
-                  style={styles.amountBtn}
-                  onPress={() => {
-                    topUp(amt);
-                    setTopUpOpen(false);
-                  }}
-                >
-                  <AppText weight="semibold" style={styles.amountText}>
-                    {formatSAR(amt)}
-                  </AppText>
-                </Pressable>
-              ))}
-            </View>
-            <AppText style={styles.sheetHint}>الشحن فوري في وضع العرض · يربط بمدى/Apple Pay في الإنتاج</AppText>
-          </Pressable>
-        </Pressable>
-      </Modal>
+      <BottomSheet visible={topUpOpen} onClose={() => setTopUpOpen(false)} title="اختر مبلغ الشحن">
+        <View style={styles.amountsGrid}>
+          {TOPUP_OPTIONS.map((amt) => (
+            <Pressable
+              key={amt}
+              style={styles.amountBtn}
+              onPress={() => {
+                topUp(amt);
+                setTopUpOpen(false);
+                toast.show(`تم شحن ${formatSAR(amt)} لمحفظتك`);
+              }}
+            >
+              <AppText weight="semibold" style={styles.amountText}>
+                {formatSAR(amt)}
+              </AppText>
+            </Pressable>
+          ))}
+        </View>
+        <AppText style={styles.sheetHint}>الشحن فوري في وضع العرض · يربط بمدى/Apple Pay في الإنتاج</AppText>
+      </BottomSheet>
     </Screen>
   );
 }
@@ -80,16 +76,6 @@ const styles = StyleSheet.create({
   pageTitle: { fontSize: fontSize.xl, marginBottom: spacing.md },
   sectionTitle: { fontSize: fontSize.base, marginTop: spacing.xl, marginBottom: spacing.xs },
 
-  overlay: { flex: 1, backgroundColor: "rgba(14,15,19,0.48)", justifyContent: "flex-end" },
-  sheet: {
-    backgroundColor: colors.pearlSoft,
-    borderTopLeftRadius: radius.xl,
-    borderTopRightRadius: radius.xl,
-    padding: spacing.xl,
-    paddingBottom: spacing.xxl,
-  },
-  sheetHandle: { alignSelf: "center", width: 40, height: 4, borderRadius: 2, backgroundColor: colors.border, marginBottom: spacing.md },
-  sheetTitle: { fontSize: fontSize.lg, marginBottom: spacing.lg, textAlign: "center" },
   amountsGrid: { flexDirection: "row-reverse", flexWrap: "wrap", gap: spacing.md, justifyContent: "space-between" },
   amountBtn: {
     width: "47%",

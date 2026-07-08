@@ -57,6 +57,7 @@ hooks/useWallet.ts       hook المحفظة (مسار الإنتاج)
 lib/format.ts            تنسيق الريال والتواريخ
 types/database.ts        أنواع البيانات المشتركة
 integrations/backend/    شاشة الدفع بنسخة Supabase + Moyasar (مرجع)
+supabase/                مخطط القاعدة + RLS + الدوال + Edge Functions (الإنتاج)
 docs/DESIGN.md           دليل التصميم الكامل
 ```
 
@@ -76,8 +77,8 @@ docs/DESIGN.md           دليل التصميم الكامل
    "extra": { "supabaseUrl": "https://xxx.supabase.co", "supabaseAnonKey": "..." }
    ```
    أو عبر متغيّرات البيئة `EXPO_PUBLIC_SUPABASE_URL` و `EXPO_PUBLIC_SUPABASE_ANON_KEY`.
-2. جهّز الجداول والدوال (`bookings`, `wallets`, `wallet_transactions`,
-   `payment_transactions`, ودوال `create-payment` / `refund-payment` / `evaluate_refund`).
+2. طبّق `supabase/schema.sql` وانشر الدوال في `supabase/functions/` — التفاصيل في
+   `supabase/README.md`.
 3. ثبّت الحزمة الأصلية للدفع وابنِ Development Build (Apple Pay لا يعمل في Expo Go):
    ```bash
    npx expo install react-native-moyasar-sdk

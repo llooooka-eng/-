@@ -6,6 +6,7 @@ import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Card, EmptyState, Screen, Stars } from "@/components/ui";
+import { useToast } from "@/components/Toast";
 import { useAuth, type LocalBooking } from "@/context/AuthContext";
 import { colors, fontSize, radius, spacing } from "@/constants/theme";
 import { formatDateTime, formatSAR } from "@/lib/format";
@@ -14,6 +15,7 @@ type Tab = "upcoming" | "past";
 
 export default function BookingsScreen() {
   const { upcomingBookings, pastBookings, cancelBooking } = useAuth();
+  const toast = useToast();
   const [tab, setTab] = useState<Tab>("upcoming");
 
   const data = tab === "upcoming" ? upcomingBookings : pastBookings;
@@ -21,7 +23,14 @@ export default function BookingsScreen() {
   const confirmCancel = (b: LocalBooking) => {
     Alert.alert("إلغاء الحجز", `هل تريد إلغاء حجزك في ${b.salonName}؟ سيُسترد المبلغ لمحفظتك.`, [
       { text: "تراجع", style: "cancel" },
-      { text: "تأكيد الإلغاء", style: "destructive", onPress: () => cancelBooking(b.id) },
+      {
+        text: "تأكيد الإلغاء",
+        style: "destructive",
+        onPress: () => {
+          cancelBooking(b.id);
+          toast.show("أُلغي الحجز واسترد المبلغ لمحفظتك", "info");
+        },
+      },
     ]);
   };
 

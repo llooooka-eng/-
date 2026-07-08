@@ -2,10 +2,12 @@
  * الرئيسية — تحية + مُبدّل المدينة + بحث + تصنيفات + صالونات مميّزة/قريبة.
  */
 import { useMemo, useState } from "react";
-import { FlatList, Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { FlatList, Pressable, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Chip, EmptyState, Screen } from "@/components/ui";
+import { BottomSheet } from "@/components/BottomSheet";
+import { useToast } from "@/components/Toast";
 import { FeaturedSalonCard, SalonRow } from "@/components/SalonCard";
 import { useAuth } from "@/context/AuthContext";
 import { CATEGORIES, CITIES, SALONS, type Category } from "@/constants/sampleData";
@@ -13,6 +15,7 @@ import { colors, fontFamily, fontSize, radius, spacing } from "@/constants/theme
 
 export default function HomeScreen() {
   const { city, setCity } = useAuth();
+  const toast = useToast();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category["id"] | null>(null);
   const [cityOpen, setCityOpen] = useState(false);
@@ -117,29 +120,22 @@ export default function HomeScreen() {
       </ScrollView>
 
       {/* مُبدّل المدينة */}
-      <Modal visible={cityOpen} transparent animationType="slide" onRequestClose={() => setCityOpen(false)}>
-        <Pressable style={styles.overlay} onPress={() => setCityOpen(false)}>
-          <Pressable style={styles.sheet}>
-            <View style={styles.sheetHandle} />
-            <AppText weight="semibold" style={styles.sheetTitle}>
-              اختر مدينتك
-            </AppText>
-            {CITIES.map((c) => (
-              <Pressable
-                key={c}
-                style={styles.cityRow}
-                onPress={() => {
-                  setCity(c);
-                  setCityOpen(false);
-                }}
-              >
-                <AppText style={{ fontSize: fontSize.base }}>{c}</AppText>
-                {c === city ? <Ionicons name="checkmark" size={18} color={colors.gold} /> : null}
-              </Pressable>
-            ))}
+      <BottomSheet visible={cityOpen} onClose={() => setCityOpen(false)} title="اختر مدينتك">
+        {CITIES.map((c) => (
+          <Pressable
+            key={c}
+            style={styles.cityRow}
+            onPress={() => {
+              setCity(c);
+              setCityOpen(false);
+              if (c !== city) toast.show(`تم اختيار ${c}`, "info");
+            }}
+          >
+            <AppText style={{ fontSize: fontSize.base }}>{c}</AppText>
+            {c === city ? <Ionicons name="checkmark" size={18} color={colors.gold} /> : null}
           </Pressable>
-        </Pressable>
-      </Modal>
+        ))}
+      </BottomSheet>
     </Screen>
   );
 }
@@ -193,18 +189,6 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: fontSize.lg, paddingHorizontal: spacing.xl, marginTop: spacing.sm, marginBottom: spacing.md },
   featuredList: { paddingLeft: spacing.xl, paddingRight: spacing.md },
   listWrap: { paddingHorizontal: spacing.xl },
-
-  overlay: { flex: 1, backgroundColor: "rgba(14,15,19,0.48)", justifyContent: "flex-end" },
-  sheet: {
-    backgroundColor: colors.pearlSoft,
-    borderTopLeftRadius: radius.xl,
-    borderTopRightRadius: radius.xl,
-    padding: spacing.xl,
-    paddingBottom: spacing.xxl,
-    gap: 2,
-  },
-  sheetHandle: { alignSelf: "center", width: 40, height: 4, borderRadius: 2, backgroundColor: colors.border, marginBottom: spacing.md },
-  sheetTitle: { fontSize: fontSize.lg, marginBottom: spacing.md, textAlign: "center" },
   cityRow: {
     flexDirection: "row-reverse",
     alignItems: "center",
