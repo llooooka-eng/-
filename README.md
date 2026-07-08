@@ -16,6 +16,22 @@ npm run ios
 npm run android
 ```
 
+> يضبط ملف `.npmrc` الخيار `legacy-peer-deps=true` تلقائياً (بسبب تعارض أقران بين
+> `expo-router` و `expo-constants` في الإصدارات المثبّتة)، فلا حاجة لتمريره يدوياً.
+
+## الفحص والاختبارات
+
+```bash
+npm run typecheck   # فحص TypeScript (tsc --noEmit)
+npm test            # اختبارات Jest
+npm run test:watch  # وضع المراقبة
+```
+
+اختبارات الوحدة تغطّي منطق الأعمال النقي في `lib/` (تنسيق المبالغ والتواريخ في
+`lib/format.ts`، ومُحوّلات المتجر في `lib/store.ts`: الحجز، الإلغاء والاسترداد،
+حساب المحفظة، التقييم). يشغّل GitHub Actions (`.github/workflows/ci.yml`) الفحص
+والاختبارات على كل دفع وطلب دمج.
+
 > يعمل التطبيق في **وضع العرض** مباشرة دون أي خادم — كل البيانات محلية عبر
 > `AsyncStorage`. سجّل الدخول بأي رقم جوال سعودي (5XXXXXXXX) وأي رمز تحقق من 4 أرقام.
 
@@ -33,7 +49,9 @@ app/                      شاشات expo-router (توجيه بالملفات)
   dashboard.tsx           لوحة صاحب الصالون (إدارة الخدمات)
 components/               مكوّنات الواجهة (ui, wallet, SalonCard, Logo, payment/)
 constants/               theme.ts (نظام التصميم) + sampleData.ts (بيانات العيّنة)
-context/AuthContext.tsx  المتجر المركزي: مصادقة + بيانات محلية (talluq_db_v1)
+context/AuthContext.tsx  غلاف React للمتجر: مصادقة + تخزين محلي (talluq_db_v1)
+lib/store.ts             منطق الأعمال النقي (مُحوّلات قابلة للاختبار)
+__tests__/               اختبارات Jest (format + store)
 services/                عميل Supabase + خدمات الحجز/المحفظة (مسار الإنتاج)
 hooks/useWallet.ts       hook المحفظة (مسار الإنتاج)
 lib/format.ts            تنسيق الريال والتواريخ

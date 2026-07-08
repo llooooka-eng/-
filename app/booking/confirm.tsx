@@ -4,7 +4,7 @@
  *
  * مسار الإنتاج (Supabase + Moyasar) في integrations/backend/ConfirmBookingBackend.tsx.
  */
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,6 +18,7 @@ export default function ConfirmBookingScreen() {
   const params = useLocalSearchParams<{
     salonId: string;
     serviceId: string;
+    serviceName?: string;
     barber: string;
     scheduledAt: string;
     locationType: "salon" | "home";
@@ -31,30 +32,27 @@ export default function ConfirmBookingScreen() {
 
   const salon = params.salonId ? getSalon(params.salonId) : undefined;
   const amount = Number(params.amount ?? 0);
-  const service =
-    salon?.services.find((s) => s.id === params.serviceId)?.name ??
-    (params.serviceId ? "خدمة" : "خدمة");
-  const serviceName = useMemo(() => {
-    // خدمات غرفة الحبر قد تكون من قائمة الإدارة؛ نكتفي بالاسم من المعطيات إن لزم
-    return salon?.services.find((s) => s.id === params.serviceId)?.name ?? service;
-  }, [salon, params.serviceId, service]);
+  const serviceName = params.serviceName || "خدمة";
 
   const walletShort = method === "wallet" && wallet.balance < amount;
 
   const pay = () => {
     if (!salon || walletShort) return;
     setPayMethod(method);
-    addBooking({
-      salonId: salon.id,
-      salonName: salon.name,
-      serviceId: params.serviceId,
-      serviceName,
-      barberName: params.barber ?? "أي حلاق متاح",
-      scheduledAt: params.scheduledAt,
-      locationType: params.locationType ?? "salon",
-      address: params.address,
-      amount,
-    });
+    addBooking(
+      {
+        salonId: salon.id,
+        salonName: salon.name,
+        serviceId: params.serviceId,
+        serviceName,
+        barberName: params.barber ?? "أي حلاق متاح",
+        scheduledAt: params.scheduledAt,
+        locationType: params.locationType ?? "salon",
+        address: params.address,
+        amount,
+      },
+      method,
+    );
     setDone(true);
   };
 

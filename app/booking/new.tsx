@@ -65,6 +65,7 @@ export default function NewBookingScreen() {
       params: {
         salonId: salon.id,
         serviceId: service.id,
+        serviceName: service.name,
         barber,
         scheduledAt: scheduled.toISOString(),
         locationType,

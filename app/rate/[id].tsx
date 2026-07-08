@@ -23,7 +23,7 @@ export default function RateScreen() {
 
   const submit = () => {
     if (!id || stars === 0) return;
-    rateBooking(id, stars);
+    rateBooking(id, stars, tags);
     router.back();
   };
 
