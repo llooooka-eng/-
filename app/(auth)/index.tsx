@@ -6,7 +6,8 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Button } from "@/components/ui";
 import { BrandLockup } from "@/components/Logo";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 
 const FEATURES: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
   { icon: "cut-outline", label: "رجال" },
@@ -16,6 +17,8 @@ const FEATURES: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
 ];
 
 export default function WelcomeScreen() {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={styles.root}>
       <View style={styles.top}>
@@ -46,7 +49,7 @@ export default function WelcomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.ink,

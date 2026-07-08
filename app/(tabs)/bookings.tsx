@@ -8,13 +8,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { AppText, Card, EmptyState, Screen, Stars } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import { useAuth, type LocalBooking } from "@/context/AuthContext";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatDateTime, formatSAR } from "@/lib/format";
 
 type Tab = "upcoming" | "past";
 
 export default function BookingsScreen() {
   const { upcomingBookings, pastBookings, cancelBooking } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const toast = useToast();
   const [tab, setTab] = useState<Tab>("upcoming");
 
@@ -107,6 +110,8 @@ export default function BookingsScreen() {
 }
 
 function TabBtn({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable onPress={onPress} style={[styles.tabBtn, active && styles.tabBtnActive]}>
       <AppText weight={active ? "semibold" : "regular"} style={[styles.tabText, active && { color: colors.ink }]}>
@@ -117,6 +122,8 @@ function TabBtn({ label, active, onPress }: { label: string; active: boolean; on
 }
 
 function StatusPill({ status }: { status: LocalBooking["status"] }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const map = {
     upcoming: { label: "قادم", bg: colors.infoBg, fg: colors.info },
     completed: { label: "مكتمل", bg: colors.successBg, fg: colors.success },
@@ -131,6 +138,8 @@ function StatusPill({ status }: { status: LocalBooking["status"] }) {
 }
 
 function Meta({ icon, text }: { icon: keyof typeof Ionicons.glyphMap; text: string }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={styles.meta}>
       <Ionicons name={icon} size={14} color={colors.textMuted} />
@@ -141,7 +150,7 @@ function Meta({ icon, text }: { icon: keyof typeof Ionicons.glyphMap; text: stri
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   pageTitle: { fontSize: fontSize.xl, paddingHorizontal: spacing.xl, paddingTop: spacing.md, paddingBottom: spacing.md },
   tabs: {
     flexDirection: "row-reverse",

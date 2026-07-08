@@ -15,7 +15,8 @@ import { Animated, Easing, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText } from "@/components/ui";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { fontSize, radius, spacing } from "@/constants/theme";
+import { useTheme } from "@/context/ThemeContext";
 
 type ToastType = "success" | "info" | "error";
 
@@ -30,13 +31,14 @@ interface ToastApi {
 
 const ToastContext = createContext<ToastApi>({ show: () => {} });
 
-const CONFIG: Record<ToastType, { bg: string; icon: keyof typeof Ionicons.glyphMap }> = {
-  success: { bg: colors.success, icon: "checkmark-circle" },
-  info: { bg: colors.ink, icon: "information-circle" },
-  error: { bg: colors.danger, icon: "alert-circle" },
+const ICON: Record<ToastType, keyof typeof Ionicons.glyphMap> = {
+  success: "checkmark-circle",
+  info: "information-circle",
+  error: "alert-circle",
 };
 
 export function ToastProvider({ children }: PropsWithChildren) {
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [toast, setToast] = useState<ToastData | null>(null);
   const opacity = useRef(new Animated.Value(0)).current;
@@ -68,20 +70,24 @@ export function ToastProvider({ children }: PropsWithChildren) {
     if (timer.current) clearTimeout(timer.current);
   }, []);
 
-  const cfg = toast ? CONFIG[toast.type] : null;
+  const bgByType: Record<ToastType, string> = {
+    success: colors.success,
+    info: colors.ink,
+    error: colors.danger,
+  };
 
   return (
     <ToastContext.Provider value={{ show }}>
       {children}
-      {toast && cfg ? (
+      {toast ? (
         <Animated.View
           pointerEvents="none"
           style={[
             styles.toast,
-            { bottom: insets.bottom + 74, backgroundColor: cfg.bg, opacity, transform: [{ translateY }] },
+            { bottom: insets.bottom + 74, backgroundColor: bgByType[toast.type], opacity, transform: [{ translateY }] },
           ]}
         >
-          <Ionicons name={cfg.icon} size={18} color="#fff" />
+          <Ionicons name={ICON[toast.type]} size={18} color="#fff" />
           <AppText weight="medium" style={styles.text} numberOfLines={2}>
             {toast.message}
           </AppText>
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: spacing.lg,
     borderRadius: radius.md,
-    shadowColor: colors.ink,
+    shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },

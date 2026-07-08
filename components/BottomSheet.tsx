@@ -5,7 +5,8 @@
 import type { PropsWithChildren } from "react";
 import { Modal, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "@/components/ui";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
+import { useThemedStyles } from "@/context/ThemeContext";
 
 export function BottomSheet({
   visible,
@@ -13,6 +14,7 @@ export function BottomSheet({
   title,
   children,
 }: PropsWithChildren<{ visible: boolean; onClose: () => void; title?: string }>) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.overlay} onPress={onClose}>
@@ -31,15 +33,16 @@ export function BottomSheet({
   );
 }
 
-const styles = StyleSheet.create({
-  overlay: { flex: 1, backgroundColor: "rgba(14,15,19,0.48)", justifyContent: "flex-end" },
-  sheet: {
-    backgroundColor: colors.pearlSoft,
-    borderTopLeftRadius: radius.xl,
-    borderTopRightRadius: radius.xl,
-    padding: spacing.xl,
-    paddingBottom: spacing.xxl,
-  },
-  handle: { alignSelf: "center", width: 40, height: 4, borderRadius: 2, backgroundColor: colors.border, marginBottom: spacing.md },
-  title: { fontSize: fontSize.lg, marginBottom: spacing.lg, textAlign: "center" },
-});
+const makeStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    overlay: { flex: 1, backgroundColor: "rgba(14,15,19,0.48)", justifyContent: "flex-end" },
+    sheet: {
+      backgroundColor: colors.pearlSoft,
+      borderTopLeftRadius: radius.xl,
+      borderTopRightRadius: radius.xl,
+      padding: spacing.xl,
+      paddingBottom: spacing.xxl,
+    },
+    handle: { alignSelf: "center", width: 40, height: 4, borderRadius: 2, backgroundColor: colors.border, marginBottom: spacing.md },
+    title: { fontSize: fontSize.lg, marginBottom: spacing.lg, textAlign: "center" },
+  });

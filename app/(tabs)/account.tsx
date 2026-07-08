@@ -4,14 +4,17 @@
 import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { AppText, Card, Screen } from "@/components/ui";
+import { AppText, Card, Chip, Screen } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { PAYMENT_METHODS } from "@/constants/sampleData";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatSAR } from "@/lib/format";
 
 export default function AccountScreen() {
   const { phone, city, payMethod, wallet, bookings, signOut } = useAuth();
+  const { colors, mode, setMode } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const payLabel = PAYMENT_METHODS.find((m) => m.id === payMethod)?.label ?? "—";
 
   const doSignOut = () => {
@@ -67,6 +70,16 @@ export default function AccountScreen() {
           />
         </View>
 
+        {/* المظهر */}
+        <AppText weight="semibold" style={styles.sectionTitle}>
+          المظهر
+        </AppText>
+        <View style={styles.themeRow}>
+          <Chip label="فاتح" active={mode === "light"} onPress={() => setMode("light")} />
+          <Chip label="داكن" active={mode === "dark"} onPress={() => setMode("dark")} />
+          <Chip label="تلقائي" active={mode === "system"} onPress={() => setMode("system")} />
+        </View>
+
         <Pressable style={styles.signOut} onPress={doSignOut}>
           <Ionicons name="log-out-outline" size={18} color={colors.danger} />
           <AppText weight="medium" style={styles.signOutText}>
@@ -81,6 +94,7 @@ export default function AccountScreen() {
 }
 
 function Stat({ value, label }: { value: string; label: string }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={styles.stat}>
       <AppText weight="semibold" style={styles.statValue}>
@@ -102,6 +116,8 @@ function Row({
   value?: string;
   onPress?: () => void;
 }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable style={styles.row} onPress={onPress} disabled={!onPress}>
       <View style={styles.rowStart}>
@@ -116,8 +132,9 @@ function Row({
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   body: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl },
+  themeRow: { flexDirection: "row-reverse", gap: spacing.sm, marginTop: spacing.lg },
   pageTitle: { fontSize: fontSize.xl, paddingTop: spacing.md, marginBottom: spacing.lg },
   userCard: { flexDirection: "row-reverse", alignItems: "center", gap: spacing.md },
   avatar: {

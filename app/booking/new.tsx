@@ -8,8 +8,9 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Button, Chip, EmptyState, Header, Screen } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { getSalon, TIME_SLOTS, type SampleService } from "@/constants/sampleData";
-import { colors, fontFamily, fontSize, radius, spacing } from "@/constants/theme";
+import { fontFamily, fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatSAR } from "@/lib/format";
 
 function nextDays(count: number) {
@@ -30,6 +31,8 @@ function nextDays(count: number) {
 export default function NewBookingScreen() {
   const { salonId, serviceId } = useLocalSearchParams<{ salonId: string; serviceId?: string }>();
   const { adminServices } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const salon = salonId ? getSalon(salonId) : undefined;
 
   const services: SampleService[] =
@@ -187,6 +190,7 @@ export default function NewBookingScreen() {
 }
 
 function Label({ text }: { text: string }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <AppText weight="semibold" style={styles.label}>
       {text}
@@ -207,6 +211,8 @@ function LocationCard({
   onPress: () => void;
   disabled?: boolean;
 }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable
       onPress={onPress}
@@ -222,7 +228,7 @@ function LocationCard({
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   body: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl },
   salonName: { fontSize: fontSize.lg, marginTop: spacing.sm },
   label: { fontSize: fontSize.base, marginTop: spacing.xl, marginBottom: spacing.md },

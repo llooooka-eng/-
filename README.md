@@ -92,3 +92,10 @@ docs/DESIGN.md           دليل التصميم الكامل
 
 كل الألوان والمسافات والزوايا والخطوط معرّفة في `constants/theme.ts` ومستمدّة من
 `docs/DESIGN.md`. الخط الأساسي `IBM Plex Sans Arabic`. الذهبي مقتصد للإبراز فقط.
+
+### الثيم الفاتح/الداكن
+
+يدعم التطبيق ثيمين (لوحتان بنفس المفاتيح: `lightColors` / `darkColors`). تقرأ
+المكوّنات اللوحة النشطة عبر `useTheme()` و `useThemedStyles(makeStyles)` من
+`context/ThemeContext.tsx`. الوضع (فاتح/داكن/تلقائي حسب الجهاز) يُبدَّل من شاشة
+«حسابي» ويُحفظ محلياً تحت `talluq_theme`.

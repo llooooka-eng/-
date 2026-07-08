@@ -8,13 +8,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { AppText, Button, Chip, Header, Screen } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import { useAuth } from "@/context/AuthContext";
-import { colors, fontSize, spacing } from "@/constants/theme";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
+import { fontSize, spacing, type AppColors } from "@/constants/theme";
 
 const TAGS = ["نظافة ممتازة", "حلاق محترف", "التزام بالموعد", "أجواء مريحة", "سعر مناسب", "سأعود مجدداً"];
 
 export default function RateScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { bookings, rateBooking } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const toast = useToast();
   const booking = bookings.find((b) => b.id === id);
 
@@ -69,7 +72,7 @@ export default function RateScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   body: { flex: 1, paddingHorizontal: spacing.xl, paddingTop: spacing.lg, paddingBottom: spacing.xl },
   salon: { fontSize: fontSize.xl, textAlign: "center" },
   sub: { color: colors.textSecondary, fontSize: fontSize.base, textAlign: "center", marginTop: spacing.xs },

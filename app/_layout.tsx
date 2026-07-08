@@ -18,8 +18,8 @@ import {
   useFonts,
 } from "@expo-google-fonts/ibm-plex-sans-arabic";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { ToastProvider } from "@/components/Toast";
-import { colors } from "@/constants/theme";
 
 // افرض RTL مرة واحدة (يتطلب إعادة تشغيل التطبيق ليأخذ مفعوله كاملاً)
 if (!I18nManager.isRTL) {
@@ -32,6 +32,7 @@ SplashScreen.preventAutoHideAsync();
 /** يوجّه بين (auth) و(tabs) بناءً على حالة الدخول */
 function RootNavigator() {
   const { authed, ready } = useAuth();
+  const { colors, isDark } = useTheme();
   const segments = useSegments();
   const router = useRouter();
 
@@ -46,15 +47,18 @@ function RootNavigator() {
   }, [authed, ready, segments, router]);
 
   return (
-    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.pearl } }}>
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="salon/[id]" options={{ presentation: "card" }} />
-      <Stack.Screen name="booking/new" options={{ presentation: "card" }} />
-      <Stack.Screen name="booking/confirm" options={{ presentation: "card" }} />
-      <Stack.Screen name="rate/[id]" options={{ presentation: "modal" }} />
-      <Stack.Screen name="dashboard" options={{ presentation: "card" }} />
-    </Stack>
+    <>
+      <StatusBar style={isDark ? "light" : "dark"} />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.pearl } }}>
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="salon/[id]" options={{ presentation: "card" }} />
+        <Stack.Screen name="booking/new" options={{ presentation: "card" }} />
+        <Stack.Screen name="booking/confirm" options={{ presentation: "card" }} />
+        <Stack.Screen name="rate/[id]" options={{ presentation: "modal" }} />
+        <Stack.Screen name="dashboard" options={{ presentation: "card" }} />
+      </Stack>
+    </>
   );
 }
 
@@ -73,12 +77,13 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <ToastProvider>
-          <StatusBar style="dark" />
-          <RootNavigator />
-        </ToastProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <RootNavigator />
+          </ToastProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }

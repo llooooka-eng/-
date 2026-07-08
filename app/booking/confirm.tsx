@@ -10,8 +10,9 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Button, Card, Header, Screen } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { getSalon, PAYMENT_METHODS, type PaymentMethodId } from "@/constants/sampleData";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatDateTime, formatSAR } from "@/lib/format";
 
 export default function ConfirmBookingScreen() {
@@ -27,6 +28,8 @@ export default function ConfirmBookingScreen() {
   }>();
 
   const { addBooking, payMethod, setPayMethod, wallet } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const [done, setDone] = useState(false);
   const [method, setMethod] = useState<PaymentMethodId>(payMethod);
 
@@ -183,6 +186,8 @@ function SummaryRow({
   label: string;
   value: string;
 }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={styles.sumRow}>
       <View style={styles.sumStart}>
@@ -196,7 +201,7 @@ function SummaryRow({
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   body: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl },
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
 

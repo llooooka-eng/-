@@ -8,8 +8,9 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Card, EmptyState, Header, Screen, Stars } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { getSalon, type SampleService } from "@/constants/sampleData";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatSAR } from "@/lib/format";
 
 const SAMPLE_REVIEWS = [
@@ -21,6 +22,8 @@ const SAMPLE_REVIEWS = [
 export default function SalonDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { adminServices } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const salon = id ? getSalon(id) : undefined;
 
   if (!salon) {
@@ -143,6 +146,7 @@ export default function SalonDetailScreen() {
 }
 
 function SectionTitle({ title }: { title: string }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <AppText weight="semibold" style={styles.sectionTitle}>
       {title}
@@ -150,7 +154,7 @@ function SectionTitle({ title }: { title: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   cover: { height: 170, alignItems: "center", justifyContent: "center", marginHorizontal: spacing.xl, borderRadius: radius.xl },
   info: { paddingHorizontal: spacing.xl, paddingTop: spacing.lg, gap: spacing.md },
   titleRow: { flexDirection: "row-reverse", alignItems: "flex-start", gap: spacing.md },

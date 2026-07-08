@@ -7,11 +7,14 @@ import { router } from "expo-router";
 import { AppText, Button, Header } from "@/components/ui";
 import { Medallion } from "@/components/Logo";
 import { useAuth } from "@/context/AuthContext";
-import { colors, fontFamily, fontSize, radius, spacing } from "@/constants/theme";
+import { fontFamily, fontSize, radius, spacing, type AppColors } from "@/constants/theme";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { Screen } from "@/components/ui";
 
 export default function LoginScreen() {
   const { signIn } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const [phone, setPhone] = useState("");
 
   const digits = phone.replace(/\D/g, "");
@@ -55,7 +58,7 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   body: { flex: 1, paddingHorizontal: spacing.xl, paddingTop: spacing.xl, gap: spacing.xl },
   hero: { alignItems: "center", gap: spacing.md, marginBottom: spacing.md },
   title: { fontSize: fontSize.xl, marginTop: spacing.sm },

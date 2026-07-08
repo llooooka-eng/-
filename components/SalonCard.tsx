@@ -4,16 +4,19 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText, Stars } from "@/components/ui";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import type { SampleSalon } from "@/constants/sampleData";
 
 function CoverArt({ salon, height }: { salon: SampleSalon; height: number }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={[styles.cover, { height, backgroundColor: salon.accent }]}>
       <Ionicons name={salon.icon} size={height * 0.42} color={colors.goldSoft} />
       {salon.homeService ? (
         <View style={styles.homeBadge}>
-          <Ionicons name="home" size={11} color={colors.ink} />
+          <Ionicons name="home" size={11} color="#1A150A" />
           <AppText style={styles.homeBadgeText}>منزلي</AppText>
         </View>
       ) : null}
@@ -22,6 +25,7 @@ function CoverArt({ salon, height }: { salon: SampleSalon; height: number }) {
 }
 
 export function FeaturedSalonCard({ salon, onPress }: { salon: SampleSalon; onPress: () => void }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.featured, { opacity: pressed ? 0.9 : 1 }]}>
       <CoverArt salon={salon} height={110} />
@@ -44,6 +48,8 @@ export function FeaturedSalonCard({ salon, onPress }: { salon: SampleSalon; onPr
 }
 
 export function SalonRow({ salon, onPress }: { salon: SampleSalon; onPress: () => void }) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.row, { opacity: pressed ? 0.9 : 1 }]}>
       <View style={[styles.rowCover, { backgroundColor: salon.accent }]}>
@@ -68,49 +74,50 @@ export function SalonRow({ salon, onPress }: { salon: SampleSalon; onPress: () =
   );
 }
 
-const styles = StyleSheet.create({
-  cover: { borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, alignItems: "center", justifyContent: "center" },
-  homeBadge: {
-    position: "absolute",
-    top: spacing.sm,
-    left: spacing.sm,
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    gap: 3,
-    backgroundColor: colors.gold,
-    borderRadius: radius.pill,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-  },
-  homeBadgeText: { fontSize: 10, color: colors.ink },
+const makeStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    cover: { borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, alignItems: "center", justifyContent: "center" },
+    homeBadge: {
+      position: "absolute",
+      top: spacing.sm,
+      left: spacing.sm,
+      flexDirection: "row-reverse",
+      alignItems: "center",
+      gap: 3,
+      backgroundColor: colors.gold,
+      borderRadius: radius.pill,
+      paddingHorizontal: 8,
+      paddingVertical: 3,
+    },
+    homeBadgeText: { fontSize: 10, color: "#1A150A" },
 
-  featured: {
-    width: 220,
-    backgroundColor: colors.white,
-    borderRadius: radius.lg,
-    borderWidth: 0.5,
-    borderColor: colors.border,
-    overflow: "hidden",
-  },
-  featuredBody: { padding: spacing.md, gap: 2 },
+    featured: {
+      width: 220,
+      backgroundColor: colors.white,
+      borderRadius: radius.lg,
+      borderWidth: 0.5,
+      borderColor: colors.border,
+      overflow: "hidden",
+    },
+    featuredBody: { padding: spacing.md, gap: 2 },
 
-  row: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    gap: spacing.md,
-    backgroundColor: colors.white,
-    borderRadius: radius.lg,
-    borderWidth: 0.5,
-    borderColor: colors.border,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-  },
-  rowCover: { width: 62, height: 62, borderRadius: radius.md, alignItems: "center", justifyContent: "center" },
-  rowBody: { flex: 1, gap: 3 },
+    row: {
+      flexDirection: "row-reverse",
+      alignItems: "center",
+      gap: spacing.md,
+      backgroundColor: colors.white,
+      borderRadius: radius.lg,
+      borderWidth: 0.5,
+      borderColor: colors.border,
+      padding: spacing.md,
+      marginBottom: spacing.md,
+    },
+    rowCover: { width: 62, height: 62, borderRadius: radius.md, alignItems: "center", justifyContent: "center" },
+    rowBody: { flex: 1, gap: 3 },
 
-  name: { fontSize: fontSize.base, color: colors.textPrimary },
-  audience: { fontSize: fontSize.sm, color: colors.textSecondary },
-  tagline: { fontSize: fontSize.sm, color: colors.textSecondary },
-  ratingRow: { flexDirection: "row-reverse", alignItems: "center", gap: 6, marginTop: 2 },
-  ratingText: { fontSize: fontSize.xs, color: colors.textMuted },
-});
+    name: { fontSize: fontSize.base, color: colors.textPrimary },
+    audience: { fontSize: fontSize.sm, color: colors.textSecondary },
+    tagline: { fontSize: fontSize.sm, color: colors.textSecondary },
+    ratingRow: { flexDirection: "row-reverse", alignItems: "center", gap: 6, marginTop: 2 },
+    ratingText: { fontSize: fontSize.xs, color: colors.textMuted },
+  });

@@ -10,11 +10,14 @@ import { BottomSheet } from "@/components/BottomSheet";
 import { useToast } from "@/components/Toast";
 import { FeaturedSalonCard, SalonRow } from "@/components/SalonCard";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { CATEGORIES, CITIES, SALONS, type Category } from "@/constants/sampleData";
-import { colors, fontFamily, fontSize, radius, spacing } from "@/constants/theme";
+import { fontFamily, fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 
 export default function HomeScreen() {
   const { city, setCity } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const toast = useToast();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category["id"] | null>(null);
@@ -141,6 +144,7 @@ export default function HomeScreen() {
 }
 
 function SectionTitle({ title }: { title: string }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <AppText weight="semibold" style={styles.sectionTitle}>
       {title}
@@ -148,7 +152,7 @@ function SectionTitle({ title }: { title: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   header: {
     flexDirection: "row-reverse",
     alignItems: "flex-start",

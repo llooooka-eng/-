@@ -10,7 +10,8 @@ import { BottomSheet } from "@/components/BottomSheet";
 import { useToast } from "@/components/Toast";
 import { TransactionRow, WalletBalanceCard } from "@/components/wallet";
 import { useAuth } from "@/context/AuthContext";
-import { colors, fontSize, radius, spacing } from "@/constants/theme";
+import { useThemedStyles } from "@/context/ThemeContext";
+import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatSAR } from "@/lib/format";
 import type { WalletTransaction } from "@/types/database";
 
@@ -18,6 +19,7 @@ const TOPUP_OPTIONS = [5000, 10000, 20000, 50000]; // بالهللة
 
 export default function WalletScreen() {
   const { wallet, topUp } = useAuth();
+  const styles = useThemedStyles(makeStyles);
   const toast = useToast();
   const [topUpOpen, setTopUpOpen] = useState(false);
 
@@ -70,7 +72,7 @@ export default function WalletScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   list: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl },
   header: { paddingTop: spacing.md },
   pageTitle: { fontSize: fontSize.xl, marginBottom: spacing.md },

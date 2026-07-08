@@ -6,10 +6,12 @@ import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { router } from "expo-router";
 import { AppText, Button, Header, Screen } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
-import { colors, fontFamily, fontSize, radius, spacing } from "@/constants/theme";
+import { fontFamily, fontSize, radius, spacing, type AppColors } from "@/constants/theme";
+import { useThemedStyles } from "@/context/ThemeContext";
 
 export default function OtpScreen() {
   const { phone, verifyOtp } = useAuth();
+  const styles = useThemedStyles(makeStyles);
   const [code, setCode] = useState("");
   const [error, setError] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -68,7 +70,7 @@ export default function OtpScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   body: { flex: 1, paddingHorizontal: spacing.xl, paddingTop: spacing.xl, gap: spacing.lg },
   title: { fontSize: fontSize.xl, textAlign: "center" },
   sub: { color: colors.textSecondary, fontSize: fontSize.base, textAlign: "center", lineHeight: 22 },

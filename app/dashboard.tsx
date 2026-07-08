@@ -9,14 +9,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { AppText, Button, Card, Header, Screen } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import type { SampleService } from "@/constants/sampleData";
-import { colors, fontFamily, fontSize, radius, spacing } from "@/constants/theme";
+import { fontFamily, fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatSAR } from "@/lib/format";
 
 const uid = () => `svc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
 export default function DashboardScreen() {
   const { adminServices, saveAdminServices } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const toast = useToast();
   const [list, setList] = useState<SampleService[]>(adminServices);
   const [name, setName] = useState("");
@@ -117,7 +120,7 @@ export default function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: AppColors) => StyleSheet.create({
   body: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl, paddingTop: spacing.md },
   info: {
     flexDirection: "row-reverse",
