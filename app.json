@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "تألق",
+    "slug": "talluq",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "talluq",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "backgroundColor": "#FAF9F6",
+    "locales": {},
+    "extra": {
+      "router": {},
+      "supabaseUrl": "",
+      "supabaseAnonKey": ""
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.talluq.app",
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true
+      }
+    },
+    "android": {
+      "package": "com.talluq.app",
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-localization",
+      "expo-font",
+      "expo-notifications",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#16181E",
+          "resizeMode": "contain"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
