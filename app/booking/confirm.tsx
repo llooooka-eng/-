@@ -14,6 +14,7 @@ import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { getSalon, PAYMENT_METHODS, type PaymentMethodId } from "@/constants/sampleData";
 import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
 import { formatDateTime, formatSAR } from "@/lib/format";
+import { scheduleBookingReminder } from "@/lib/notifications";
 
 export default function ConfirmBookingScreen() {
   const params = useLocalSearchParams<{
@@ -27,7 +28,7 @@ export default function ConfirmBookingScreen() {
     amount: string;
   }>();
 
-  const { addBooking, payMethod, setPayMethod, wallet } = useAuth();
+  const { addBooking, attachReminder, payMethod, setPayMethod, wallet } = useAuth();
   const { colors } = useTheme();
   const styles = useThemedStyles(makeStyles);
   const [done, setDone] = useState(false);
@@ -42,7 +43,7 @@ export default function ConfirmBookingScreen() {
   const pay = () => {
     if (!salon || walletShort) return;
     setPayMethod(method);
-    addBooking(
+    const booking = addBooking(
       {
         salonId: salon.id,
         salonName: salon.name,
@@ -56,6 +57,14 @@ export default function ConfirmBookingScreen() {
       },
       method,
     );
+    // جدولة تذكير محلي قبل الموعد (غير قاطع إن رُفض الإذن)
+    scheduleBookingReminder({
+      salonName: salon.name,
+      serviceName,
+      scheduledAt: params.scheduledAt,
+    }).then((id) => {
+      if (id) attachReminder(booking.id, id);
+    });
     setDone(true);
   };
 

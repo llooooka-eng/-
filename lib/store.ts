@@ -26,6 +26,7 @@ export interface LocalBooking {
   rated: boolean;
   ratingValue?: number;
   ratingTags?: string[];
+  reminderId?: string;
   createdAt: string;
 }
 
@@ -143,6 +144,14 @@ export function cancelBooking(db: TalluqDb, id: string): TalluqDb {
       balance: db.wallet.balance + target.amount,
       transactions: [refund, ...db.wallet.transactions],
     },
+  };
+}
+
+/** ربط معرّف إشعار التذكير بالحجز (بعد جدولته). */
+export function attachReminder(db: TalluqDb, id: string, reminderId: string): TalluqDb {
+  return {
+    ...db,
+    bookings: db.bookings.map((b) => (b.id === id ? { ...b, reminderId } : b)),
   };
 }
 

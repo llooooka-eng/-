@@ -33,6 +33,7 @@
       "expo-router",
       "expo-localization",
       "expo-font",
+      "expo-notifications",
       [
         "expo-splash-screen",
         {

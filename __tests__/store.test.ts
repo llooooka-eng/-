@@ -1,5 +1,6 @@
 import {
   addBooking,
+  attachReminder,
   cancelBooking,
   initialDb,
   partitionBookings,
@@ -94,6 +95,14 @@ describe("rateBooking", () => {
     expect(target?.rated).toBe(true);
     expect(target?.ratingValue).toBe(5);
     expect(target?.ratingTags).toEqual(["نظافة ممتازة"]);
+  });
+});
+
+describe("attachReminder", () => {
+  it("يربط معرّف الإشعار بالحجز", () => {
+    const { db, booking } = addBooking(freshDb(), sampleInput(), "mada");
+    const after = attachReminder(db, booking.id, "notif-123");
+    expect(after.bookings.find((b) => b.id === booking.id)?.reminderId).toBe("notif-123");
   });
 });
 

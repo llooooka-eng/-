@@ -47,6 +47,7 @@ interface StoreValue {
   upcomingBookings: LocalBooking[];
   pastBookings: LocalBooking[];
   addBooking: (input: NewBookingInput, method: PaymentMethodId) => LocalBooking;
+  attachReminder: (id: string, reminderId: string) => void;
   cancelBooking: (id: string) => void;
   rateBooking: (id: string, value: number, tags?: string[]) => void;
   // wallet
@@ -120,6 +121,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
     [db],
   );
 
+  const attachReminder = useCallback(
+    (id: string, reminderId: string) => patch((prev) => store.attachReminder(prev, id, reminderId)),
+    [patch],
+  );
+
   const cancelBooking = useCallback((id: string) => patch((prev) => store.cancelBooking(prev, id)), [patch]);
 
   const rateBooking = useCallback(
@@ -155,6 +161,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       upcomingBookings: upcoming,
       pastBookings: past,
       addBooking,
+      attachReminder,
       cancelBooking,
       rateBooking,
       wallet: db.wallet,
@@ -171,6 +178,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setCity,
     setPayMethod,
     addBooking,
+    attachReminder,
     cancelBooking,
     rateBooking,
     topUp,

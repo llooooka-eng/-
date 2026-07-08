@@ -10,6 +10,7 @@ import { useToast } from "@/components/Toast";
 import { useAuth, type LocalBooking } from "@/context/AuthContext";
 import { useTheme, useThemedStyles } from "@/context/ThemeContext";
 import { fontSize, radius, spacing, type AppColors } from "@/constants/theme";
+import { cancelReminder } from "@/lib/notifications";
 import { formatDateTime, formatSAR } from "@/lib/format";
 
 type Tab = "upcoming" | "past";
@@ -30,6 +31,7 @@ export default function BookingsScreen() {
         text: "تأكيد الإلغاء",
         style: "destructive",
         onPress: () => {
+          cancelReminder(b.reminderId);
           cancelBooking(b.id);
           toast.show("أُلغي الحجز واسترد المبلغ لمحفظتك", "info");
         },
