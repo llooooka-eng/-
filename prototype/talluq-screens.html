@@ -1,0 +1,595 @@
+<title>تألق — معاينة الشاشات الكاملة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --pearl-0:#FFFFFF; --pearl-50:#FAF9F6; --pearl-100:#F4F3EE; --pearl-200:#ECEAE2;
+  --ink-950:#0E0F13; --ink-900:#16181E; --ink-800:#1F222A; --ink-700:#2B2F3A;
+  --ink-600:#3C4150; --ink-500:#565C6B; --ink-400:#767D8D; --ink-300:#A0A6B2;
+  --ink-200:#C9CCD4; --ink-100:#E4E6EB; --ink-50:#F0F1F4;
+  --gold-700:#8A6D18; --gold-600:#A8851C; --gold-500:#C4A032; --gold-400:#D8BB57;
+  --gold-300:#E7D289; --gold-200:#F1E4B8; --gold-100:#F8F1DA;
+  --green-500:#1E9E63; --green-100:#DFF3E8; --amber-500:#D68B12; --amber-100:#FBEFD6;
+  --red-500:#DC4C4C; --red-100:#FBE3E3; --blue-500:#2F7BD1; --blue-100:#E1EDFA;
+
+  --surface-page:var(--pearl-50); --surface-card:var(--pearl-0); --surface-sunken:var(--pearl-100);
+  --text-primary:var(--ink-900); --text-secondary:var(--ink-500); --text-muted:var(--ink-400);
+  --border-subtle:var(--ink-100); --border-default:var(--ink-200); --border-strong:var(--ink-300);
+  --brand:var(--ink-900); --brand-contrast:var(--pearl-50);
+  --accent:var(--gold-500); --accent-soft:var(--gold-100); --accent-text:var(--gold-700);
+  --success:var(--green-500); --success-soft:var(--green-100);
+  --warning:var(--amber-500); --warning-soft:var(--amber-100);
+  --danger:var(--red-500); --danger-soft:var(--red-100);
+  --overlay:rgba(14,15,19,.48);
+  --shadow-sm:0 1px 3px rgba(14,15,19,.06),0 1px 2px rgba(14,15,19,.05);
+  --shadow-md:0 4px 12px rgba(14,15,19,.08);
+  --shadow-lg:0 14px 34px rgba(14,15,19,.13);
+  --r-sm:9px; --r-md:13px; --r-lg:18px; --r-xl:24px; --r-2xl:30px; --r-full:999px;
+  --font:"IBM Plex Sans Arabic","SF Arabic","Geeza Pro","Segoe UI","Noto Sans Arabic",Tahoma,system-ui,sans-serif;
+  --stage:#EDE7DB; --stage-2:#E4DCCB; --stage-ink:#1a1c22;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --surface-page:var(--ink-950); --surface-card:var(--ink-900); --surface-sunken:var(--ink-800);
+  --text-primary:var(--ink-50); --text-secondary:var(--ink-300); --text-muted:var(--ink-400);
+  --border-subtle:var(--ink-800); --border-default:var(--ink-700); --border-strong:var(--ink-600);
+  --brand:var(--pearl-50); --brand-contrast:var(--ink-950);
+  --accent:var(--gold-400); --accent-soft:rgba(196,160,50,.16); --accent-text:var(--gold-300);
+  --success-soft:rgba(30,158,99,.18); --warning-soft:rgba(214,139,18,.18); --danger-soft:rgba(220,76,76,.18);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4); --shadow-md:0 4px 14px rgba(0,0,0,.5); --shadow-lg:0 16px 40px rgba(0,0,0,.55);
+  --stage:#101216; --stage-2:#08090c; --stage-ink:#0b0c10;
+}}
+:root[data-theme="dark"]{
+  --surface-page:var(--ink-950); --surface-card:var(--ink-900); --surface-sunken:var(--ink-800);
+  --text-primary:var(--ink-50); --text-secondary:var(--ink-300); --text-muted:var(--ink-400);
+  --border-subtle:var(--ink-800); --border-default:var(--ink-700); --border-strong:var(--ink-600);
+  --brand:var(--pearl-50); --brand-contrast:var(--ink-950);
+  --accent:var(--gold-400); --accent-soft:rgba(196,160,50,.16); --accent-text:var(--gold-300);
+  --success-soft:rgba(30,158,99,.18); --warning-soft:rgba(214,139,18,.18); --danger-soft:rgba(220,76,76,.18);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4); --shadow-md:0 4px 14px rgba(0,0,0,.5); --shadow-lg:0 16px 40px rgba(0,0,0,.55);
+  --stage:#101216; --stage-2:#08090c; --stage-ink:#0b0c10;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font:400 15px/1.55 var(--font); color:var(--text-primary); direction:rtl;
+  background:radial-gradient(1200px 700px at 50% -8%,rgba(196,160,50,.10),transparent 60%),linear-gradient(165deg,var(--stage),var(--stage-2));
+  min-height:100vh; padding:40px 20px 70px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1240px;margin:0 auto}
+.masthead{text-align:center;margin-bottom:14px}
+.masthead .kicker{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--font);letter-spacing:.16em;color:var(--accent-text);background:var(--accent-soft);padding:8px 14px;border-radius:var(--r-full)}
+.masthead h1{font:700 40px/1.15 var(--font);margin:16px 0 8px;letter-spacing:-.01em}
+.masthead p{color:var(--text-secondary);max-width:56ch;margin:0 auto;font-size:15px}
+.legend{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:20px 0 6px}
+.legend span{display:inline-flex;align-items:center;gap:7px;font:500 12px/1 var(--font);color:var(--text-secondary);background:var(--surface-card);border:1px solid var(--border-subtle);padding:8px 12px;border-radius:var(--r-full);box-shadow:var(--shadow-sm)}
+.legend i{width:9px;height:9px;border-radius:99px;display:inline-block}
+
+.flow-title{display:flex;align-items:center;gap:14px;margin:52px 0 26px}
+.flow-title h2{font:600 24px/1 var(--font);white-space:nowrap}
+.flow-title .ln{height:1px;flex:1;background:linear-gradient(90deg,var(--border-strong),transparent)}
+.flow-title .cnt{font:500 12px/1 var(--font);color:var(--text-muted);background:var(--surface-card);border:1px solid var(--border-subtle);padding:6px 11px;border-radius:var(--r-full)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:34px 26px;justify-items:center}
+
+/* إطار الجوال */
+figure.phone{margin:0;display:flex;flex-direction:column;align-items:center;gap:13px;width:288px}
+.frame{width:288px;height:610px;background:var(--surface-page);border-radius:38px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg),0 0 0 8px var(--stage-ink),0 0 0 9px rgba(255,255,255,.05);display:flex;flex-direction:column;color:var(--text-primary)}
+.frame .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:98px;height:19px;background:var(--stage-ink);border-radius:0 0 12px 12px;z-index:40}
+.sb{display:flex;justify-content:space-between;align-items:center;padding:9px 20px 2px;font:600 11px/1 var(--font);font-variant-numeric:tabular-nums;z-index:5}
+.sb .r{display:flex;gap:5px;opacity:.85}
+.sb .r .ic{width:13px;height:13px}
+.body{flex:1;overflow:hidden;padding:6px 15px 14px;display:flex;flex-direction:column;position:relative}
+figcaption{text-align:center}
+figcaption b{display:block;font:600 14px/1.2 var(--font)}
+figcaption span{font:500 11px/1 var(--font);color:var(--text-muted);direction:ltr}
+
+.ic{width:18px;height:18px;display:inline-block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* عناصر عامة مصغّرة */
+.h-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.h-row .ov{font:600 10px/1 var(--font);letter-spacing:.08em;color:var(--text-muted)}
+.h-row h3{font:600 19px/1.2 var(--font);margin-top:3px}
+.mini-btn{width:34px;height:34px;border-radius:var(--r-full);background:var(--surface-card);border:1px solid var(--border-subtle);display:grid;place-items:center;color:var(--text-primary);box-shadow:var(--shadow-sm)}
+.mini-btn .ic{width:16px;height:16px}
+.pillbtn{display:inline-flex;align-items:center;gap:5px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-full);padding:7px 11px;font:500 11px/1 var(--font);box-shadow:var(--shadow-sm)}
+.pillbtn .ic{width:13px;height:13px;color:var(--accent-text)}
+
+.card{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.btn{display:flex;align-items:center;justify-content:center;gap:7px;border:none;border-radius:var(--r-md);height:46px;font:600 14px/1 var(--font);cursor:default}
+.btn .ic{width:17px;height:17px;stroke-width:2}
+.btn-brand{background:var(--brand);color:var(--brand-contrast)}
+.btn-gold{background:var(--accent);color:var(--ink-950);box-shadow:0 7px 18px rgba(196,160,50,.3)}
+.btn-out{background:transparent;border:1px solid var(--border-default);color:var(--text-primary)}
+.btn-block{width:100%}
+.field{height:46px;border-radius:var(--r-md);border:1px solid var(--border-default);background:var(--surface-card);display:flex;align-items:center;gap:9px;padding:0 12px;color:var(--text-muted);font:400 13px/1 var(--font)}
+.field .ic{width:16px;height:16px}
+.lbl{font:500 12px/1 var(--font);color:var(--text-secondary);margin-bottom:7px;display:block}
+.tag{background:var(--surface-sunken);border-radius:var(--r-sm);padding:3px 8px;font:600 10px/1.3 var(--font);color:var(--text-secondary)}
+.chip{flex:none;display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 12px;border-radius:var(--r-full);background:var(--surface-card);border:1px solid var(--border-subtle);font:500 11px/1 var(--font);color:var(--text-secondary)}
+.chip .ic{width:13px;height:13px}
+.chip.on{background:var(--brand);color:var(--brand-contrast);border-color:var(--brand)}
+
+/* الميدالية */
+.medallion{width:var(--s,64px);height:var(--s,64px);border-radius:50%;display:grid;place-items:center;flex:none;background:conic-gradient(from 210deg,#7a5f16,#e7d289,#c4a032,#f4e6b0,#a8851c,#e7d289,#7a5f16);box-shadow:0 7px 18px rgba(0,0,0,.4),inset 0 1px 1px rgba(255,255,255,.5)}
+.medallion .disc{width:76%;height:76%;border-radius:50%;background:radial-gradient(120% 120% at 30% 25%,#31343d,#16181e 70%);display:grid;place-items:center;box-shadow:inset 0 2px 5px rgba(0,0,0,.6)}
+.medallion .mono{color:var(--gold-300);font-weight:700}
+
+/* غطاء داكن */
+.cover{border-radius:var(--r-md);position:relative;overflow:hidden}
+.cvr-a{background:linear-gradient(135deg,#20232c,#3a2f18)}
+.cvr-b{background:linear-gradient(135deg,#3a2f18,#6b5518)}
+.cvr-c{background:linear-gradient(135deg,#243027,#3a2f18)}
+.cvr-d{background:linear-gradient(135deg,#2b2540,#3a2f18)}
+.cvr-e{background:linear-gradient(135deg,#2e2630,#5a4a52)}
+.inkcard{background:radial-gradient(120% 140% at 85% -20%,#2a2d38,var(--ink-900) 58%);color:#fff;position:relative;overflow:hidden}
+.inkcard::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 10% 120%,rgba(196,160,50,.28),transparent 58%)}
+
+.star{fill:var(--accent);stroke:none}
+.list{display:flex;flex-direction:column;gap:9px}
+
+/* شريط سفلي مصغّر */
+.tabbar{position:absolute;bottom:0;inset-inline:0;height:56px;background:color-mix(in srgb,var(--surface-card) 90%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--border-subtle);display:flex;justify-content:space-around;align-items:center;padding-bottom:5px}
+.tabbar .t{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-muted);font:600 9px/1 var(--font)}
+.tabbar .t .ic{width:19px;height:19px}
+.tabbar .t.on{color:var(--accent-text)}
+.scrollbody{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:11px;padding-bottom:60px}
+
+.svc-row{display:flex;align-items:center;gap:9px;padding:9px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--surface-card)}
+.svc-row .si{width:34px;height:34px;border-radius:var(--r-sm);background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;flex:none}
+.svc-row .si .ic{width:16px;height:16px}
+.svc-row .st{flex:1;min-width:0}
+.svc-row .st .n{font:600 12px/1.2 var(--font)}
+.svc-row .st .d{font:400 10px/1 var(--font);color:var(--text-muted);margin-top:3px}
+.svc-row .p{font:600 12px/1 var(--font)}
+.svc-row .add{width:26px;height:26px;border-radius:7px;background:var(--accent);color:var(--ink-950);display:grid;place-items:center;flex:none}
+.svc-row .add .ic{width:15px;height:15px;stroke-width:2.4}
+
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat .v{font:700 20px/1 var(--font);font-variant-numeric:tabular-nums}
+.stat .k{font:500 10px/1 var(--font);color:var(--text-muted)}
+.mrow{display:flex;align-items:center;gap:10px;padding:11px;border-bottom:1px solid var(--border-subtle)}
+.mrow:last-child{border-bottom:none}
+.mrow .mi{width:32px;height:32px;border-radius:var(--r-sm);background:var(--surface-sunken);color:var(--accent-text);display:grid;place-items:center;flex:none}
+.mrow .mi .ic{width:16px;height:16px}
+.mrow .ml{flex:1}
+.mrow .ml .t{font:600 12px/1.2 var(--font)}
+.mrow .ml .s{font:400 10px/1 var(--font);color:var(--text-muted);margin-top:2px}
+.mrow .chev{width:15px;height:15px;color:var(--text-muted)}
+.switch{width:36px;height:21px;border-radius:99px;background:var(--accent);position:relative;flex:none}
+.switch::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:17px;height:17px;border-radius:50%;background:#fff}
+.switch.off{background:var(--border-strong)}
+.switch.off::after{inset-inline-start:auto;inset-inline-end:2px}
+
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:10px}
+.footer-cap{text-align:center;color:var(--text-muted);font:500 12px/1.6 var(--font);margin-top:56px;padding-top:22px;border-top:1px solid var(--border-strong)}
+.footer-cap b{color:var(--text-secondary)}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.86-4.25 4.14 1 5.86L12 17.9l-5.25 2.76 1-5.86L3.5 9.66l5.9-.86L12 3.5Z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.35-7-9.5A3.5 3.5 0 0 1 12 7a3.5 3.5 0 0 1 7 3.5C19 15.65 12 20 12 20Z"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8 8 20 18M8 16 20 6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-check-c" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5L16 9"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M4 9h16M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="m8.5 11 6-4M8.5 13l6 4"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 8l1.3 2.7L16 12l-2.7 1.3L12 16l-1.3-2.7L8 12l2.7-1.3Z"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke-width="1.4"/></symbol>
+  <symbol id="i-home-svc" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-4h4v4"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M16 14h2"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7M12 16.5v.01"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h4v16h-4"/><path d="M4 12h11M11 8l4 4-4 4"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9 5 4h14l1 5M4 9v10h16V9M4 9h16" /><path d="M4 9a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V6M10 20V10M16 20V4M22 20H2" stroke-width="1.8"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M4 12V5a1 1 0 0 1 1-1h7l8 8-8 8-8-8Z"/><circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14a8 8 0 1 1-10-10 7 7 0 0 0 10 10Z"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M4 18v-3M9 18v-6M14 18v-9M19 18V6" stroke-width="2"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M4 8a13 13 0 0 1 16 0M7 12a8 8 0 0 1 10 0M10 15.5a3 3 0 0 1 4 0"/></symbol>
+  <symbol id="i-batt" viewBox="0 0 24 24"><rect x="3" y="8" width="16" height="9" rx="2"/><rect x="5" y="10" width="9" height="5" rx="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-apple" viewBox="0 0 24 24"><path d="M16 13c0-3 2.5-3.5 2.5-3.5C17.5 8 16 8 15 8.5c-.8.4-1.5.4-2.3 0C11.5 8 10 8 8.7 9.2 6.5 11.3 7.3 16 9 18c.8 1 1.6 1.8 2.7 1.4.7-.3 1.3-.3 2 0 1.1.4 1.9-.4 2.7-1.4.5-.6.9-1.3 1.1-2-1.5-.6-1.5-2.4-1.5-3Z" fill="currentColor" stroke="none"/><path d="M14 5.5c.6-.8.5-2 .5-2s-1.2.1-1.9.9c-.6.7-.6 1.9-.6 1.9s1.3 0 2-.8Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-google" viewBox="0 0 24 24"><path d="M21 12.2c0-.7-.1-1.3-.2-2H12v3.9h5.1a4.4 4.4 0 0 1-1.9 2.9v2.4h3.1c1.8-1.7 2.7-4.1 2.7-7.1Z" fill="currentColor" stroke="none"/><path d="M12 21c2.5 0 4.6-.8 6.2-2.3l-3.1-2.4c-.9.6-2 .9-3.1.9-2.4 0-4.4-1.6-5.1-3.8H3.7v2.4A9 9 0 0 0 12 21Z" fill="currentColor" stroke="none" opacity=".7"/><path d="M6.9 13.4a5.4 5.4 0 0 1 0-3.4V7.6H3.7a9 9 0 0 0 0 8.2l3.2-2.4Z" fill="currentColor" stroke="none" opacity=".5"/><path d="M12 6.6c1.3 0 2.5.5 3.5 1.4l2.6-2.6A9 9 0 0 0 3.7 7.6L6.9 10c.7-2.2 2.7-3.4 5.1-3.4Z" fill="currentColor" stroke="none" opacity=".85"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2.5"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l1.5-2h5L16 7"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L18 10l-4-4L4 16v4Z"/><path d="M13 7l4 4"/></symbol>
+  <symbol id="i-toggle" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="5"/><circle cx="16" cy="12" r="3" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="masthead">
+    <span class="kicker"><svg class="ic" style="width:14px;height:14px"><use href="#i-spark"/></svg>TALLUQ · معاينة كاملة</span>
+    <h1>تألق — كل شاشات التطبيق</h1>
+    <p>معاينة بصرية لجميع الشاشات (تدفّق العميل + تدفّق صاحب الصالون) بنظام تصميم تألق: لؤلؤي · حبري · لمسة ذهبية — عربي RTL بالكامل. الثيم يتبع جهازك (فاتح/داكن).</p>
+    <div class="legend">
+      <span><i style="background:var(--gold-500)"></i>ذهبي — الإبراز والتألق</span>
+      <span><i style="background:var(--ink-900);box-shadow:0 0 0 1px var(--border-strong)"></i>حبري — الأزرار والنص</span>
+      <span><i style="background:var(--pearl-100);box-shadow:0 0 0 1px var(--border-strong)"></i>لؤلؤي — الأسطح</span>
+      <span><i style="background:var(--green-500)"></i>دلالي — الحالات</span>
+    </div>
+  </header>
+
+  <!-- ============================ تدفّق العميل ============================ -->
+  <div class="flow-title"><h2>تدفّق العميل</h2><span class="cnt">١٦ شاشة</span><span class="ln"></span></div>
+  <div class="grid">
+
+    <!-- 1 الترحيب -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body inkcard" style="border-radius:0;margin:-6px -15px -14px;padding:0">
+        <div class="center" style="color:#fff;z-index:1">
+          <div class="medallion" style="--s:104px"><div class="disc"><span class="mono" style="font-size:46px">ت</span></div></div>
+          <div><div style="font:700 34px/1 var(--font);color:#fff">تألق</div><div style="font:600 11px/1 var(--font);letter-spacing:.28em;color:var(--gold-300);margin-top:9px">TALLUQ</div></div>
+          <p style="color:rgba(255,255,255,.72);font-size:13px;max-width:24ch">أهلاً بك في تألق — احجز موعدك في أرقى الصالونات بلمسة تلمع</p>
+          <div style="width:100%;padding:0 26px;display:flex;flex-direction:column;gap:10px;margin-top:8px">
+            <div class="btn btn-gold btn-block">ابدأ الآن</div>
+            <div class="btn btn-block" style="background:rgba(255,255,255,.1);color:#fff">لديّ حساب</div>
+          </div>
+        </div>
+      </div>
+    </div><figcaption><b>الترحيب</b><span>(auth)/index</span></figcaption></figure>
+
+    <!-- 2 الدخول -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:6px 0 18px">
+          <div class="medallion" style="--s:56px"><div class="disc"><span class="mono" style="font-size:24px">ت</span></div></div>
+          <div style="font:600 19px/1 var(--font)">تسجيل الدخول</div>
+          <div style="font:400 11px/1 var(--font);color:var(--text-muted)">أهلاً بعودتك</div>
+        </div>
+        <div class="list">
+          <div><span class="lbl">البريد الإلكتروني</span><div class="field"><svg class="ic"><use href="#i-mail"/></svg>you@email.com</div></div>
+          <div><span class="lbl">كلمة المرور</span><div class="field"><svg class="ic"><use href="#i-lock"/></svg>••••••••</div></div>
+        </div>
+        <div class="btn btn-gold btn-block" style="margin-top:16px">دخول</div>
+        <div style="display:flex;align-items:center;gap:9px;margin:15px 0;color:var(--text-muted);font:400 10px/1 var(--font)"><div style="flex:1;height:1px;background:var(--border-subtle)"></div>أو تابع بـ<div style="flex:1;height:1px;background:var(--border-subtle)"></div></div>
+        <div style="display:flex;gap:10px"><div class="btn btn-out" style="flex:1"><svg class="ic"><use href="#i-google"/></svg>Google</div><div class="btn btn-out" style="flex:1"><svg class="ic"><use href="#i-apple"/></svg>Apple</div></div>
+      </div>
+    </div><figcaption><b>الدخول</b><span>(auth)/login</span></figcaption></figure>
+
+    <!-- 3 نوع الحساب -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div class="h-row"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div></div>
+        <div style="margin:4px 0 18px"><div style="font:600 20px/1.2 var(--font)">أنشئ حسابك</div><div style="font:400 12px/1.4 var(--font);color:var(--text-muted);margin-top:5px">اختر نوع الحساب لتبدأ</div></div>
+        <div class="list">
+          <div class="card" style="padding:14px;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)">
+            <div style="display:flex;align-items:center;gap:11px"><div class="svc-row" style="border:none;padding:0"><div class="si"><svg class="ic"><use href="#i-user"/></svg></div></div><div style="flex:1"><div style="font:600 14px/1.2 var(--font)">عميل</div><div style="font:400 11px/1.3 var(--font);color:var(--text-muted);margin-top:2px">احجز مواعيدك في الصالونات</div></div><svg class="ic" style="color:var(--accent)"><use href="#i-check-c"/></svg></div>
+          </div>
+          <div class="card" style="padding:14px">
+            <div style="display:flex;align-items:center;gap:11px"><div class="svc-row" style="border:none;padding:0"><div class="si"><svg class="ic"><use href="#i-store"/></svg></div></div><div style="flex:1"><div style="font:600 14px/1.2 var(--font)">صاحب صالون</div><div style="font:400 11px/1.3 var(--font);color:var(--text-muted);margin-top:2px">أدِر صالونك وخدماتك وحجوزاتك</div></div></div>
+          </div>
+        </div>
+        <div class="btn btn-brand btn-block" style="margin-top:auto">متابعة</div>
+      </div>
+    </div><figcaption><b>نوع الحساب</b><span>(auth)/role</span></figcaption></figure>
+
+    <!-- 4 الرئيسية -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="scrollbody">
+        <div class="h-row"><div><div class="ov">مساء الخير 🌙</div><h3 style="font-size:17px">أهلاً، عبدالله</h3></div><div style="display:flex;gap:7px"><div class="pillbtn"><svg class="ic"><use href="#i-pin"/></svg>الرياض</div><div class="mini-btn"><svg class="ic"><use href="#i-bell"/></svg></div></div></div>
+        <div class="inkcard" style="border-radius:var(--r-lg);padding:14px;display:flex;align-items:center;gap:12px">
+          <div class="medallion" style="--s:52px;z-index:1"><div class="disc"><span class="mono" style="font-size:22px">ت</span></div></div>
+          <div style="z-index:1"><div style="font:600 9px/1 var(--font);letter-spacing:.14em;color:var(--gold-300)">TALLUQ</div><div style="font:700 18px/1.1 var(--font);color:#fff;margin:2px 0 4px">تألق</div><div style="font:400 10px/1.3 var(--font);color:rgba(255,255,255,.7)">احجز بلمسة تلمع</div></div>
+        </div>
+        <div class="field" style="color:var(--text-muted)"><svg class="ic"><use href="#i-search"/></svg>ابحث عن صالون أو خدمة</div>
+        <div style="display:flex;gap:7px;overflow:hidden"><div class="chip on"><svg class="ic"><use href="#i-spark"/></svg>الكل</div><div class="chip"><svg class="ic"><use href="#i-scissors"/></svg>رجال</div><div class="chip"><svg class="ic"><use href="#i-star"/></svg>نساء</div><div class="chip">أطفال</div></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font:600 14px/1 var(--font)">صالونات مميّزة</div><div style="font:500 10px/1 var(--font);color:var(--accent-text)">عرض الكل</div></div>
+        <div class="card" style="overflow:hidden">
+          <div class="cover cvr-a" style="height:74px;border-radius:0;display:flex;align-items:flex-start;justify-content:space-between;padding:8px"><span style="background:rgba(14,15,19,.5);color:#fff;border-radius:99px;padding:3px 7px;font:600 9px/1 var(--font);display:inline-flex;gap:4px;align-items:center"><svg class="ic star" style="width:11px;height:11px"><use href="#i-star"/></svg>٤٫٩</span></div>
+          <div style="padding:9px 10px"><div style="font:600 12px/1.2 var(--font)">غرفة الحبر</div><div style="display:flex;justify-content:space-between;margin-top:6px"><span class="tag">رجال</span><span style="font:600 11px/1 var(--font)">من <b style="color:var(--accent-text)">٦٠ ر.س</b></span></div></div>
+        </div>
+      </div></div>
+      <div class="tabbar"><div class="t on"><svg class="ic"><use href="#i-home"/></svg>الرئيسية</div><div class="t"><svg class="ic"><use href="#i-cal"/></svg>حجوزاتي</div><div class="t"><svg class="ic"><use href="#i-heart"/></svg>مفضلتي</div><div class="t"><svg class="ic"><use href="#i-user"/></svg>حسابي</div></div>
+    </div><figcaption><b>الرئيسية</b><span>(tabs)/index</span></figcaption></figure>
+
+    <!-- 5 تفاصيل الصالون -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="body" style="padding:0">
+        <div class="cover cvr-a" style="height:150px;border-radius:0;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:12px;color:#fff">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,15,19,.85),transparent 60%)"></div>
+          <div class="sb" style="padding:2px 4px;color:#fff;z-index:1"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+          <div style="display:flex;justify-content:space-between;z-index:1"><div class="mini-btn" style="background:rgba(14,15,19,.4);border:none;color:#fff"><svg class="ic"><use href="#i-chev-l"/></svg></div><div style="display:flex;gap:6px"><div class="mini-btn" style="background:rgba(14,15,19,.4);border:none;color:#fff"><svg class="ic"><use href="#i-share"/></svg></div><div class="mini-btn" style="background:rgba(14,15,19,.4);border:none;color:#fff"><svg class="ic"><use href="#i-heart"/></svg></div></div></div>
+          <div style="z-index:1"><div style="font:600 20px/1.1 var(--font);color:#fff">غرفة الحبر</div><div style="display:flex;gap:12px;margin-top:5px;font:400 10px/1 var(--font);color:rgba(255,255,255,.85)"><span style="display:inline-flex;gap:4px;align-items:center"><svg class="ic star" style="width:12px;height:12px"><use href="#i-star"/></svg>٤٫٩ · ٣١٢</span><span style="display:inline-flex;gap:4px;align-items:center"><svg class="ic" style="width:12px;height:12px"><use href="#i-pin"/></svg>حي النخيل</span></div></div>
+        </div>
+        <div style="padding:12px 15px;flex:1;overflow:hidden">
+          <div style="display:flex;gap:5px;margin-bottom:11px"><div class="chip on" style="flex:1;justify-content:center">الخدمات</div><div class="chip" style="flex:1;justify-content:center">الطاقم</div><div class="chip" style="flex:1;justify-content:center">الآراء</div></div>
+          <div class="list">
+            <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-scissors"/></svg></div><div class="st"><div class="n">قصة كلاسيكية</div><div class="d">٣٠ دقيقة</div></div><div class="p">٦٠ ر.س</div><div class="add"><svg class="ic"><use href="#i-plus"/></svg></div></div>
+            <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-scissors"/></svg></div><div class="st"><div class="n">فيد (تدرّج)</div><div class="d">٤٥ دقيقة</div></div><div class="p">٧٥ ر.س</div><div class="add"><svg class="ic"><use href="#i-plus"/></svg></div></div>
+            <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-spark"/></svg></div><div class="st"><div class="n">تشذيب لحية</div><div class="d">٢٠ دقيقة</div></div><div class="p">٤٥ ر.س</div><div class="add"><svg class="ic"><use href="#i-plus"/></svg></div></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border-subtle);background:var(--surface-card);padding:11px 15px;display:flex;align-items:center;gap:11px"><div style="flex:1"><div style="font:600 9px/1 var(--font);color:var(--text-muted)">الإجمالي</div><div style="font:600 15px/1.2 var(--font)"><b style="color:var(--accent-text)">٦٠ ر.س</b></div></div><div class="btn btn-gold" style="padding:0 16px;height:42px">متابعة الحجز</div></div>
+      </div>
+    </div><figcaption><b>تفاصيل الصالون</b><span>salon/[id]</span></figcaption></figure>
+
+    <!-- 6 حجز موعد -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div class="h-row"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div><h3 style="font-size:16px">حجز موعد</h3><div style="width:34px"></div></div>
+        <div class="list" style="gap:14px">
+          <div><span class="lbl">اختر الحلاق</span><div style="display:flex;gap:8px"><div class="chip on"><svg class="ic"><use href="#i-user"/></svg>فهد</div><div class="chip"><svg class="ic"><use href="#i-user"/></svg>سلطان</div><div class="chip"><svg class="ic"><use href="#i-user"/></svg>ماجد</div></div></div>
+          <div><span class="lbl">التاريخ</span><div style="display:flex;gap:8px"><div class="chip on">اليوم</div><div class="chip">غدًا</div><div class="chip">الأحد ١٤</div><div class="chip">الإثنين</div></div></div>
+          <div><span class="lbl">الساعات المتاحة</span><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
+            <div style="text-align:center;padding:9px 0;border-radius:8px;border:1px solid var(--border-default);font:600 11px/1 var(--font);opacity:.4;text-decoration:line-through">٤:٠٠</div>
+            <div style="text-align:center;padding:9px 0;border-radius:8px;border:1px solid var(--border-default);font:600 11px/1 var(--font)">٥:٠٠</div>
+            <div style="text-align:center;padding:9px 0;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--ink-950);font:600 11px/1 var(--font)">٦:٣٠</div>
+            <div style="text-align:center;padding:9px 0;border-radius:8px;border:1px solid var(--border-default);font:600 11px/1 var(--font)">٧:٠٠</div>
+          </div></div>
+          <div><span class="lbl">مكان الخدمة</span><div style="display:flex;gap:8px"><div class="chip on"><svg class="ic"><use href="#i-scissors"/></svg>في الصالون</div><div class="chip"><svg class="ic"><use href="#i-home-svc"/></svg>منزلي +٣٠</div></div></div>
+        </div>
+        <div class="btn btn-gold btn-block" style="margin-top:auto">التالي — التأكيد</div>
+      </div>
+    </div><figcaption><b>حجز موعد</b><span>booking/new</span></figcaption></figure>
+
+    <!-- 7 التأكيد والدفع -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div class="h-row"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div><h3 style="font-size:16px">التأكيد والدفع</h3><div style="width:34px"></div></div>
+        <div class="card" style="padding:13px;margin-bottom:12px">
+          <div style="font:600 13px/1 var(--font);margin-bottom:10px">ملخّص الفاتورة</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font:400 11px/1 var(--font);color:var(--text-secondary)">
+            <div style="display:flex;justify-content:space-between"><span>قصة كلاسيكية</span><span>٦٠ ر.س</span></div>
+            <div style="display:flex;justify-content:space-between"><span>شعر + لحية</span><span>٩٥ ر.س</span></div>
+            <div style="display:flex;justify-content:space-between"><span>رسوم الخدمة</span><span>٥ ر.س</span></div>
+            <div style="display:flex;justify-content:space-between;border-top:1px dashed var(--border-strong);padding-top:9px;margin-top:3px;font:600 14px/1 var(--font);color:var(--text-primary)"><span>الإجمالي</span><b style="color:var(--accent-text)">١٦٠ ر.س</b></div>
+          </div>
+        </div>
+        <span class="lbl">طريقة الدفع</span>
+        <div class="list">
+          <div class="svc-row" style="border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)"><div class="si"><svg class="ic"><use href="#i-card"/></svg></div><div class="st"><div class="n">مدى ·· ٤٢٤٢</div><div class="d">افتراضية</div></div><svg class="ic" style="color:var(--accent)"><use href="#i-check-c"/></svg></div>
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-apple"/></svg></div><div class="st"><div class="n">Apple Pay</div></div></div>
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-wallet"/></svg></div><div class="st"><div class="n">محفظة تألق</div><div class="d">الرصيد ١٢٠ ر.س</div></div></div>
+        </div>
+        <div class="btn btn-gold btn-block" style="margin-top:auto"><svg class="ic"><use href="#i-lock"/></svg>ادفع ١٦٠ ر.س</div>
+      </div>
+    </div><figcaption><b>التأكيد والدفع</b><span>booking/confirm</span></figcaption></figure>
+
+    <!-- 8 نجاح الحجز -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="center">
+        <div style="width:82px;height:82px;border-radius:50%;background:var(--success-soft);display:grid;place-items:center"><div style="width:56px;height:56px;border-radius:50%;background:var(--success);display:grid;place-items:center;color:#fff"><svg class="ic" style="width:30px;height:30px;stroke-width:2.6"><use href="#i-check"/></svg></div></div>
+        <div><div style="font:600 20px/1.2 var(--font)">تم تأكيد حجزك ✦</div><div style="font:400 12px/1.5 var(--font);color:var(--text-muted);margin-top:6px">أرسلنا لك تفاصيل الموعد وتذكيرًا قبله</div></div>
+        <div class="card" style="width:100%;padding:14px;text-align:right">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid var(--border-subtle)"><span style="font:400 10px/1 var(--font);color:var(--text-muted)">رمز الحجز</span><b style="font:700 15px/1 var(--font);letter-spacing:.12em;color:var(--accent-text);direction:ltr">TLQ-8241</b></div>
+          <div style="display:flex;flex-direction:column;gap:8px;font:400 11px/1 var(--font);color:var(--text-secondary)">
+            <div style="display:flex;gap:7px;align-items:center"><svg class="ic" style="width:14px;height:14px;color:var(--accent-text)"><use href="#i-scissors"/></svg>غرفة الحبر · قصة كلاسيكية</div>
+            <div style="display:flex;gap:7px;align-items:center"><svg class="ic" style="width:14px;height:14px;color:var(--accent-text)"><use href="#i-cal"/></svg>الأحد ١٤ يوليو · ٦:٣٠ م</div>
+            <div style="display:flex;gap:7px;align-items:center"><svg class="ic" style="width:14px;height:14px;color:var(--accent-text)"><use href="#i-user"/></svg>مع الحلّاق فهد</div>
+          </div>
+        </div>
+        <div class="btn btn-brand btn-block">عرض حجوزاتي</div>
+      </div></div>
+    </div><figcaption><b>نجاح الحجز</b><span>booking/success</span></figcaption></figure>
+
+    <!-- 9 حجوزاتي -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="scrollbody">
+        <div class="h-row"><div><div class="ov">مواعيدك</div><h3>حجوزاتي</h3></div></div>
+        <div style="display:flex;background:var(--surface-sunken);border-radius:var(--r-md);padding:3px"><div style="flex:1;text-align:center;padding:8px;border-radius:8px;background:var(--surface-card);box-shadow:var(--shadow-sm);font:600 11px/1 var(--font)">قادمة</div><div style="flex:1;text-align:center;padding:8px;font:500 11px/1 var(--font);color:var(--text-muted)">مكتملة</div></div>
+        <div class="card" style="padding:12px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font:600 13px/1.2 var(--font)">غرفة الحبر</div><div style="font:400 10px/1 var(--font);color:var(--text-secondary);margin-top:3px">قصة كلاسيكية · مع فهد</div></div><span style="font:600 9px/1 var(--font);padding:4px 8px;border-radius:99px;background:var(--success-soft);color:var(--success)">مؤكّد</span></div>
+          <div style="display:flex;gap:14px;margin-top:11px;padding-top:11px;border-top:1px solid var(--border-subtle);font:400 10px/1 var(--font);color:var(--text-secondary)"><span style="display:inline-flex;gap:5px;align-items:center"><svg class="ic" style="width:13px;height:13px;color:var(--accent-text)"><use href="#i-cal"/></svg>الأحد ١٤ يوليو</span><span style="display:inline-flex;gap:5px;align-items:center"><svg class="ic" style="width:13px;height:13px;color:var(--accent-text)"><use href="#i-clock"/></svg>٦:٣٠ م</span></div>
+        </div>
+        <div class="card" style="padding:12px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font:600 13px/1.2 var(--font)">ميزون لومي</div><div style="font:400 10px/1 var(--font);color:var(--text-secondary);margin-top:3px">عناية · خدمة منزلية</div></div><span style="font:600 9px/1 var(--font);padding:4px 8px;border-radius:99px;background:var(--warning-soft);color:var(--warning)">بالانتظار</span></div>
+          <div style="display:flex;gap:14px;margin-top:11px;padding-top:11px;border-top:1px solid var(--border-subtle);font:400 10px/1 var(--font);color:var(--text-secondary)"><span style="display:inline-flex;gap:5px;align-items:center"><svg class="ic" style="width:13px;height:13px;color:var(--accent-text)"><use href="#i-cal"/></svg>الثلاثاء ١٦</span><span style="display:inline-flex;gap:5px;align-items:center"><svg class="ic" style="width:13px;height:13px;color:var(--accent-text)"><use href="#i-home-svc"/></svg>المنزل</span></div>
+        </div>
+      </div></div>
+      <div class="tabbar"><div class="t"><svg class="ic"><use href="#i-home"/></svg>الرئيسية</div><div class="t on"><svg class="ic"><use href="#i-cal"/></svg>حجوزاتي</div><div class="t"><svg class="ic"><use href="#i-heart"/></svg>مفضلتي</div><div class="t"><svg class="ic"><use href="#i-user"/></svg>حسابي</div></div>
+    </div><figcaption><b>حجوزاتي</b><span>(tabs)/bookings</span></figcaption></figure>
+
+    <!-- 10 التقييم -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div class="h-row"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div><h3 style="font-size:16px">قيّم تجربتك</h3><div style="width:34px"></div></div>
+        <div class="center" style="flex:none;gap:9px;margin:10px 0 18px">
+          <div class="cover cvr-a" style="width:56px;height:56px;border-radius:var(--r-md)"></div>
+          <div style="font:600 15px/1.2 var(--font)">غرفة الحبر</div>
+          <div style="font:400 11px/1 var(--font);color:var(--text-muted)">قصة كلاسيكية · مع فهد</div>
+          <div style="display:flex;gap:6px;margin-top:4px"><svg class="ic star" style="width:26px;height:26px"><use href="#i-star"/></svg><svg class="ic star" style="width:26px;height:26px"><use href="#i-star"/></svg><svg class="ic star" style="width:26px;height:26px"><use href="#i-star"/></svg><svg class="ic star" style="width:26px;height:26px"><use href="#i-star"/></svg><svg class="ic" style="width:26px;height:26px;fill:var(--border-strong);stroke:none"><use href="#i-star"/></svg></div>
+        </div>
+        <span class="lbl">ما الذي أعجبك؟</span>
+        <div style="display:flex;flex-wrap:wrap;gap:7px"><div class="chip on">الاحترافية</div><div class="chip">النظافة</div><div class="chip on">المواعيد</div><div class="chip">الأسعار</div><div class="chip">الأجواء</div></div>
+        <div class="field" style="height:64px;align-items:flex-start;padding-top:11px;margin-top:14px;color:var(--text-muted)">أضف تعليقًا (اختياري)…</div>
+        <div class="btn btn-gold btn-block" style="margin-top:auto">إرسال التقييم</div>
+      </div>
+    </div><figcaption><b>التقييم</b><span>rate/[id]</span></figcaption></figure>
+
+    <!-- 11 مفضلتي -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="scrollbody">
+        <div class="h-row"><div><div class="ov">محفوظاتك</div><h3>مفضلتي</h3></div></div>
+        <div class="list">
+          <div class="card" style="display:flex;gap:11px;padding:10px;align-items:center"><div class="cover cvr-a" style="width:56px;height:56px;flex:none"></div><div style="flex:1"><div style="font:600 13px/1.2 var(--font)">غرفة الحبر</div><div style="display:flex;gap:5px;align-items:center;font:400 10px/1 var(--font);color:var(--text-muted);margin-top:4px"><svg class="ic star" style="width:12px;height:12px"><use href="#i-star"/></svg>٤٫٩ · رجال</div><div class="tag" style="margin-top:7px;display:inline-block">من ٦٠ ر.س</div></div><svg class="ic" style="color:var(--danger);fill:var(--danger)"><use href="#i-heart"/></svg></div>
+          <div class="card" style="display:flex;gap:11px;padding:10px;align-items:center"><div class="cover cvr-e" style="width:56px;height:56px;flex:none"></div><div style="flex:1"><div style="font:600 13px/1.2 var(--font)">دار اللؤلؤة</div><div style="display:flex;gap:5px;align-items:center;font:400 10px/1 var(--font);color:var(--text-muted);margin-top:4px"><svg class="ic star" style="width:12px;height:12px"><use href="#i-star"/></svg>٥٫٠ · نساء</div><div class="tag" style="margin-top:7px;display:inline-block">من ٩٠ ر.س</div></div><svg class="ic" style="color:var(--danger);fill:var(--danger)"><use href="#i-heart"/></svg></div>
+          <div class="card" style="display:flex;gap:11px;padding:10px;align-items:center"><div class="cover cvr-b" style="width:56px;height:56px;flex:none"></div><div style="flex:1"><div style="font:600 13px/1.2 var(--font)">الشفرة الذهبية</div><div style="display:flex;gap:5px;align-items:center;font:400 10px/1 var(--font);color:var(--text-muted);margin-top:4px"><svg class="ic" style="width:12px;height:12px"><use href="#i-home-svc"/></svg>خدمة منزلية</div><div class="tag" style="margin-top:7px;display:inline-block">من ٧٥ ر.س</div></div><svg class="ic" style="color:var(--danger);fill:var(--danger)"><use href="#i-heart"/></svg></div>
+        </div>
+      </div></div>
+      <div class="tabbar"><div class="t"><svg class="ic"><use href="#i-home"/></svg>الرئيسية</div><div class="t"><svg class="ic"><use href="#i-cal"/></svg>حجوزاتي</div><div class="t on"><svg class="ic"><use href="#i-heart"/></svg>مفضلتي</div><div class="t"><svg class="ic"><use href="#i-user"/></svg>حسابي</div></div>
+    </div><figcaption><b>مفضلتي</b><span>favorites</span></figcaption></figure>
+
+    <!-- 12 حسابي -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="scrollbody">
+        <div class="h-row"><div><div class="ov">حسابي</div><h3>الملف الشخصي</h3></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--ink-700),var(--ink-900));display:grid;place-items:center;color:var(--gold-300);font:600 20px/1 var(--font)">ع</div><div><div style="font:600 15px/1.2 var(--font)">عبدالله العتيبي</div><div style="font:400 10px/1 var(--font);color:var(--text-muted);margin-top:3px;direction:ltr">+966 50 123 4567</div></div></div>
+        <div class="inkcard" style="border-radius:var(--r-lg);padding:14px"><div style="display:flex;justify-content:space-between;align-items:center;z-index:1;position:relative"><span style="font:600 9px/1 var(--font);letter-spacing:.1em;color:var(--gold-300)">محفظة تألق</span><svg class="ic" style="color:var(--gold-300)"><use href="#i-wallet"/></svg></div><div style="font:700 20px/1 var(--font);color:#fff;margin-top:8px;z-index:1;position:relative">١٢٠٫٠٠ <span style="font:500 11px/1 var(--font);color:rgba(255,255,255,.7)">ر.س</span></div></div>
+        <div class="card" style="overflow:hidden">
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-card"/></svg></div><div class="ml"><div class="t">طرق الدفع</div><div class="s">مدى ·· ٤٢٤٢</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-toggle"/></svg></div><div class="ml"><div class="t">الإعدادات</div><div class="s">المظهر · اللغة · الإشعارات</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-help"/></svg></div><div class="ml"><div class="t">المساعدة والدعم</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+        </div>
+      </div></div>
+      <div class="tabbar"><div class="t"><svg class="ic"><use href="#i-home"/></svg>الرئيسية</div><div class="t"><svg class="ic"><use href="#i-cal"/></svg>حجوزاتي</div><div class="t"><svg class="ic"><use href="#i-heart"/></svg>مفضلتي</div><div class="t on"><svg class="ic"><use href="#i-user"/></svg>حسابي</div></div>
+    </div><figcaption><b>حسابي</b><span>(tabs)/account</span></figcaption></figure>
+
+    <!-- 13 الإعدادات -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div class="h-row"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div><h3 style="font-size:16px">الإعدادات</h3><div style="width:34px"></div></div>
+        <span class="lbl">المظهر</span>
+        <div class="card" style="overflow:hidden;margin-bottom:14px">
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-moon"/></svg></div><div class="ml"><div class="t">الوضع الداكن</div><div class="s">حبري فاخر مريح للعين</div></div><div class="switch"></div></div>
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-globe"/></svg></div><div class="ml"><div class="t">اللغة</div><div class="s">العربية</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+        </div>
+        <span class="lbl">الإشعارات</span>
+        <div class="card" style="overflow:hidden">
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-bell"/></svg></div><div class="ml"><div class="t">تذكير المواعيد</div></div><div class="switch"></div></div>
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-tag"/></svg></div><div class="ml"><div class="t">العروض والخصومات</div></div><div class="switch off"></div></div>
+        </div>
+        <div class="card" style="overflow:hidden;margin-top:14px">
+          <div class="mrow"><div class="mi" style="background:var(--danger-soft);color:var(--danger)"><svg class="ic"><use href="#i-out"/></svg></div><div class="ml"><div class="t" style="color:var(--danger)">تسجيل الخروج</div></div></div>
+        </div>
+      </div>
+    </div><figcaption><b>الإعدادات</b><span>account/settings</span></figcaption></figure>
+
+    <!-- 14 سجل المدفوعات -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div class="h-row"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div><h3 style="font-size:16px">سجل المدفوعات</h3><div style="width:34px"></div></div>
+        <div class="card" style="padding:13px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center"><div class="stat"><span class="k">أنفقت هذا الشهر</span><span class="v">٤٢٠ <span style="font-size:12px;color:var(--text-muted)">ر.س</span></span></div><div class="svc-row" style="border:none;padding:0"><div class="si" style="width:40px;height:40px"><svg class="ic" style="width:19px;height:19px"><use href="#i-chart"/></svg></div></div></div>
+        <div class="list">
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-scissors"/></svg></div><div class="st"><div class="n">غرفة الحبر</div><div class="d">١٤ يوليو · مدى ·· ٤٢٤٢</div></div><div class="p">١٦٠ ر.س</div></div>
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-star"/></svg></div><div class="st"><div class="n">دار اللؤلؤة</div><div class="d">٤ يوليو · Apple Pay</div></div><div class="p">١٩٠ ر.س</div></div>
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-scissors"/></svg></div><div class="st"><div class="n">قصّات التاج</div><div class="d">٢٩ يونيو · محفظة تألق</div></div><div class="p">٧٠ ر.س</div></div>
+        </div>
+      </div>
+    </div><figcaption><b>سجل المدفوعات</b><span>account/payments</span></figcaption></figure>
+
+    <!-- 15 نتائج البحث -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div><div class="field" style="flex:1;color:var(--text-primary)"><svg class="ic"><use href="#i-search"/></svg>لحية</div></div>
+        <div style="display:flex;gap:7px;margin-bottom:12px;overflow:hidden"><div class="chip on">الكل</div><div class="chip">الأقرب</div><div class="chip">الأعلى تقييمًا</div><div class="chip">مفتوح الآن</div></div>
+        <div style="font:400 10px/1 var(--font);color:var(--text-muted);margin-bottom:9px">٦ نتائج</div>
+        <div class="list">
+          <div class="card" style="display:flex;gap:11px;padding:10px;align-items:center"><div class="cover cvr-a" style="width:52px;height:52px;flex:none"></div><div style="flex:1"><div style="font:600 12px/1.2 var(--font)">غرفة الحبر</div><div style="font:400 10px/1 var(--font);color:var(--text-muted);margin-top:4px">تشذيب لحية · ٤٥ ر.س</div></div><span class="rate" style="font:600 11px/1 var(--font);display:inline-flex;gap:3px;align-items:center"><svg class="ic star" style="width:13px;height:13px"><use href="#i-star"/></svg>٤٫٩</span></div>
+          <div class="card" style="display:flex;gap:11px;padding:10px;align-items:center"><div class="cover cvr-b" style="width:52px;height:52px;flex:none"></div><div style="flex:1"><div style="font:600 12px/1.2 var(--font)">الشفرة الذهبية</div><div style="font:400 10px/1 var(--font);color:var(--text-muted);margin-top:4px">حلاقة + لحية · ٧٥ ر.س</div></div><span style="font:600 11px/1 var(--font);display:inline-flex;gap:3px;align-items:center"><svg class="ic star" style="width:13px;height:13px"><use href="#i-star"/></svg>٤٫٨</span></div>
+          <div class="card" style="display:flex;gap:11px;padding:10px;align-items:center"><div class="cover cvr-c" style="width:52px;height:52px;flex:none"></div><div style="flex:1"><div style="font:600 12px/1.2 var(--font)">قصّات التاج</div><div style="font:400 10px/1 var(--font);color:var(--text-muted);margin-top:4px">تهذيب لحية · ٥٠ ر.س</div></div><span style="font:600 11px/1 var(--font);display:inline-flex;gap:3px;align-items:center"><svg class="ic star" style="width:13px;height:13px"><use href="#i-star"/></svg>٤٫٧</span></div>
+        </div>
+      </div>
+    </div><figcaption><b>نتائج البحث</b><span>search</span></figcaption></figure>
+
+    <!-- 16 الإشعارات -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div class="h-row"><div class="mini-btn"><svg class="ic"><use href="#i-chev-l"/></svg></div><h3 style="font-size:16px">الإشعارات</h3><div style="font:500 10px/1 var(--font);color:var(--accent-text)">قراءة الكل</div></div>
+        <div class="list">
+          <div class="card" style="display:flex;gap:10px;padding:11px;align-items:flex-start;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-soft)"><div class="mi" style="background:var(--success-soft);color:var(--success)"><svg class="ic"><use href="#i-check-c"/></svg></div><div style="flex:1"><div style="font:600 12px/1.3 var(--font)">تم تأكيد حجزك</div><div style="font:400 10px/1.4 var(--font);color:var(--text-muted);margin-top:3px">غرفة الحبر · الأحد ٦:٣٠ م</div></div><span style="width:7px;height:7px;border-radius:99px;background:var(--accent);flex:none;margin-top:5px"></span></div>
+          <div class="card" style="display:flex;gap:10px;padding:11px;align-items:flex-start"><div class="mi"><svg class="ic"><use href="#i-clock"/></svg></div><div style="flex:1"><div style="font:600 12px/1.3 var(--font)">تذكير بموعدك غدًا</div><div style="font:400 10px/1.4 var(--font);color:var(--text-muted);margin-top:3px">لا تنسَ موعدك في ميزون لومي</div></div></div>
+          <div class="card" style="display:flex;gap:10px;padding:11px;align-items:flex-start"><div class="mi" style="background:var(--accent-soft)"><svg class="ic"><use href="#i-tag"/></svg></div><div style="flex:1"><div style="font:600 12px/1.3 var(--font)">خصم ٢٠٪ هذا الأسبوع</div><div style="font:400 10px/1.4 var(--font);color:var(--text-muted);margin-top:3px">على خدمات دار اللؤلؤة</div></div></div>
+          <div class="card" style="display:flex;gap:10px;padding:11px;align-items:flex-start"><div class="mi" style="background:var(--warning-soft);color:var(--warning)"><svg class="ic"><use href="#i-star"/></svg></div><div style="flex:1"><div style="font:600 12px/1.3 var(--font)">قيّم زيارتك الأخيرة</div><div style="font:400 10px/1.4 var(--font);color:var(--text-muted);margin-top:3px">شاركنا رأيك في قصّات التاج</div></div></div>
+        </div>
+      </div>
+    </div><figcaption><b>الإشعارات</b><span>notifications</span></figcaption></figure>
+
+  </div>
+
+  <!-- ============================ تدفّق صاحب الصالون ============================ -->
+  <div class="flow-title"><h2>تدفّق صاحب الصالون</h2><span class="cnt">٤ شاشات</span><span class="ln"></span></div>
+  <div class="grid">
+
+    <!-- 17 إعداد المحل -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body">
+        <div style="margin:6px 0 16px"><div style="font:600 20px/1.2 var(--font)">إعداد صالونك</div><div style="font:400 11px/1.4 var(--font);color:var(--text-muted);margin-top:5px">الخطوة ١ من ٣ — معلومات المحل</div><div style="display:flex;gap:5px;margin-top:11px"><div style="flex:1;height:4px;border-radius:99px;background:var(--accent)"></div><div style="flex:1;height:4px;border-radius:99px;background:var(--border-default)"></div><div style="flex:1;height:4px;border-radius:99px;background:var(--border-default)"></div></div></div>
+        <div style="display:flex;justify-content:center;margin-bottom:16px"><div style="width:82px;height:82px;border-radius:var(--r-lg);background:var(--surface-sunken);border:1.5px dashed var(--border-strong);display:grid;place-items:center;color:var(--text-muted)"><svg class="ic" style="width:26px;height:26px"><use href="#i-camera"/></svg></div></div>
+        <div class="list" style="gap:12px">
+          <div><span class="lbl">اسم الصالون</span><div class="field" style="color:var(--text-primary)"><svg class="ic"><use href="#i-store"/></svg>غرفة الحبر</div></div>
+          <div><span class="lbl">النوع</span><div style="display:flex;gap:7px"><div class="chip on">رجال</div><div class="chip">نساء</div><div class="chip">عائلي</div><div class="chip">أطفال</div></div></div>
+          <div><span class="lbl">الموقع</span><div class="field"><svg class="ic"><use href="#i-pin"/></svg>حي النخيل، الرياض</div></div>
+        </div>
+        <div class="btn btn-brand btn-block" style="margin-top:auto">التالي</div>
+      </div>
+    </div><figcaption><b>إعداد المحل</b><span>salon-setup</span></figcaption></figure>
+
+    <!-- 18 لوحة الصالون -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="scrollbody">
+        <div class="h-row"><div><div class="ov">لوحة التحكّم</div><h3 style="font-size:17px">غرفة الحبر</h3></div><div class="mini-btn"><svg class="ic"><use href="#i-bell"/></svg></div></div>
+        <div style="display:flex;gap:9px">
+          <div class="card" style="flex:1;padding:12px"><div class="stat"><span class="v" style="color:var(--accent-text)">٨</span><span class="k">حجوزات اليوم</span></div></div>
+          <div class="card" style="flex:1;padding:12px"><div class="stat"><span class="v">١٬٢٤٠</span><span class="k">دخل اليوم (ر.س)</span></div></div>
+        </div>
+        <div class="card" style="padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font:600 12px/1 var(--font)">هذا الأسبوع</span><span style="font:600 10px/1 var(--font);color:var(--success);display:inline-flex;gap:3px;align-items:center">▲ ١٢٪</span></div><div style="display:flex;align-items:flex-end;gap:6px;height:56px">
+          <div style="flex:1;background:var(--surface-sunken);border-radius:4px 4px 0 0;height:40%"></div>
+          <div style="flex:1;background:var(--surface-sunken);border-radius:4px 4px 0 0;height:65%"></div>
+          <div style="flex:1;background:var(--surface-sunken);border-radius:4px 4px 0 0;height:50%"></div>
+          <div style="flex:1;background:var(--accent);border-radius:4px 4px 0 0;height:90%"></div>
+          <div style="flex:1;background:var(--surface-sunken);border-radius:4px 4px 0 0;height:70%"></div>
+          <div style="flex:1;background:var(--surface-sunken);border-radius:4px 4px 0 0;height:55%"></div>
+          <div style="flex:1;background:var(--surface-sunken);border-radius:4px 4px 0 0;height:80%"></div>
+        </div></div>
+        <div style="font:600 12px/1 var(--font)">المواعيد القادمة</div>
+        <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-user"/></svg></div><div class="st"><div class="n">سعود · قصة كلاسيكية</div><div class="d">٦:٣٠ م · مع فهد</div></div><span style="font:600 9px/1 var(--font);padding:4px 8px;border-radius:99px;background:var(--success-soft);color:var(--success)">مؤكّد</span></div>
+      </div></div>
+      <div class="tabbar"><div class="t on"><svg class="ic"><use href="#i-chart"/></svg>اللوحة</div><div class="t"><svg class="ic"><use href="#i-scissors"/></svg>الخدمات</div><div class="t"><svg class="ic"><use href="#i-cal"/></svg>الحجوزات</div><div class="t"><svg class="ic"><use href="#i-store"/></svg>الصالون</div></div>
+    </div><figcaption><b>لوحة الصالون</b><span>(salon)/index</span></figcaption></figure>
+
+    <!-- 19 إدارة الخدمات -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="scrollbody">
+        <div class="h-row"><div><div class="ov">إدارة</div><h3>الخدمات</h3></div><div class="pillbtn" style="color:var(--brand-contrast);background:var(--brand);border-color:var(--brand)"><svg class="ic" style="color:var(--brand-contrast)"><use href="#i-plus"/></svg>إضافة</div></div>
+        <div class="list">
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-scissors"/></svg></div><div class="st"><div class="n">قصة كلاسيكية</div><div class="d">٣٠ دقيقة · ٦٠ ر.س</div></div><div class="switch"></div><div class="svc-row" style="border:none;padding:0;color:var(--text-muted)"><svg class="ic" style="width:16px"><use href="#i-edit"/></svg></div></div>
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-scissors"/></svg></div><div class="st"><div class="n">فيد (تدرّج)</div><div class="d">٤٥ دقيقة · ٧٥ ر.س</div></div><div class="switch"></div><svg class="ic" style="width:16px;color:var(--text-muted)"><use href="#i-edit"/></svg></div>
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-spark"/></svg></div><div class="st"><div class="n">تشذيب لحية</div><div class="d">٢٠ دقيقة · ٤٥ ر.س</div></div><div class="switch"></div><svg class="ic" style="width:16px;color:var(--text-muted)"><use href="#i-edit"/></svg></div>
+          <div class="svc-row" style="opacity:.6"><div class="si"><svg class="ic"><use href="#i-spark"/></svg></div><div class="st"><div class="n">فوطة ساخنة</div><div class="d">٢٥ دقيقة · ٥٥ ر.س</div></div><div class="switch off"></div><svg class="ic" style="width:16px;color:var(--text-muted)"><use href="#i-edit"/></svg></div>
+          <div class="svc-row"><div class="si"><svg class="ic"><use href="#i-scissors"/></svg></div><div class="st"><div class="n">شعر + لحية</div><div class="d">٦٠ دقيقة · ٩٥ ر.س</div></div><div class="switch"></div><svg class="ic" style="width:16px;color:var(--text-muted)"><use href="#i-edit"/></svg></div>
+        </div>
+      </div></div>
+      <div class="tabbar"><div class="t"><svg class="ic"><use href="#i-chart"/></svg>اللوحة</div><div class="t on"><svg class="ic"><use href="#i-scissors"/></svg>الخدمات</div><div class="t"><svg class="ic"><use href="#i-cal"/></svg>الحجوزات</div><div class="t"><svg class="ic"><use href="#i-store"/></svg>الصالون</div></div>
+    </div><figcaption><b>إدارة الخدمات</b><span>(salon)/services</span></figcaption></figure>
+
+    <!-- 20 حساب الصالون -->
+    <figure class="phone"><div class="frame"><div class="notch"></div>
+      <div class="sb"><b>٩:٤١</b><div class="r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div></div>
+      <div class="body"><div class="scrollbody">
+        <div class="h-row"><div><div class="ov">إدارة الصالون</div><h3>حساب الصالون</h3></div></div>
+        <div class="card" style="padding:12px;display:flex;gap:11px;align-items:center"><div class="cover cvr-a" style="width:50px;height:50px;flex:none"></div><div style="flex:1"><div style="font:600 14px/1.2 var(--font)">غرفة الحبر</div><div style="display:flex;gap:5px;align-items:center;font:400 10px/1 var(--font);color:var(--text-muted);margin-top:4px"><svg class="ic star" style="width:12px;height:12px"><use href="#i-star"/></svg>٤٫٩ · ٣١٢ تقييم</div></div><span style="font:600 9px/1 var(--font);padding:4px 8px;border-radius:99px;background:var(--success-soft);color:var(--success)">مفعّل</span></div>
+        <div class="card" style="overflow:hidden">
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-store"/></svg></div><div class="ml"><div class="t">معلومات المحل</div><div class="s">الاسم · الموقع · الصور</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-clock"/></svg></div><div class="ml"><div class="t">ساعات العمل</div><div class="s">السبت–الخميس · ٤م–١١م</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-user"/></svg></div><div class="ml"><div class="t">الطاقم</div><div class="s">٤ حلّاقين</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mrow"><div class="mi"><svg class="ic"><use href="#i-wallet"/></svg></div><div class="ml"><div class="t">التسويات المالية</div><div class="s">IBAN ·· ٩٩٢٤</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+        </div>
+        <div class="card" style="overflow:hidden"><div class="mrow"><div class="mi" style="background:var(--danger-soft);color:var(--danger)"><svg class="ic"><use href="#i-out"/></svg></div><div class="ml"><div class="t" style="color:var(--danger)">تسجيل الخروج</div></div></div></div>
+      </div></div>
+      <div class="tabbar"><div class="t"><svg class="ic"><use href="#i-chart"/></svg>اللوحة</div><div class="t"><svg class="ic"><use href="#i-scissors"/></svg>الخدمات</div><div class="t"><svg class="ic"><use href="#i-cal"/></svg>الحجوزات</div><div class="t on"><svg class="ic"><use href="#i-store"/></svg>الصالون</div></div>
+    </div><figcaption><b>حساب الصالون</b><span>(salon)/account</span></figcaption></figure>
+
+  </div>
+
+  <div class="footer-cap">
+    تألق (Talluq) · ٢٠ شاشة · نظام تصميم <b>لؤلؤي · حبري · ذهبي</b> — عربي RTL<br>
+    معاينة بصرية مبنية على توثيق التطبيق ومواصفة التصميم
+  </div>
+</div>
