@@ -1,0 +1,878 @@
+<meta charset="utf-8">
+<title>تألق — نموذج الواجهة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* ============================================================
+   تألق (Talluq) — Design tokens (من Talluq-Design.md)
+   Pearl + Ink + لمسة ذهبية · RTL أولاً
+   ============================================================ */
+:root{
+  /* السلالم */
+  --pearl-0:#FFFFFF; --pearl-50:#FAF9F6; --pearl-100:#F4F3EE; --pearl-200:#ECEAE2;
+  --ink-950:#0E0F13; --ink-900:#16181E; --ink-800:#1F222A; --ink-700:#2B2F3A;
+  --ink-600:#3C4150; --ink-500:#565C6B; --ink-400:#767D8D; --ink-300:#A0A6B2;
+  --ink-200:#C9CCD4; --ink-100:#E4E6EB; --ink-50:#F0F1F4;
+  --gold-700:#8A6D18; --gold-600:#A8851C; --gold-500:#C4A032; --gold-400:#D8BB57;
+  --gold-300:#E7D289; --gold-200:#F1E4B8; --gold-100:#F8F1DA;
+  --green-500:#1E9E63; --green-100:#DFF3E8; --amber-500:#D68B12; --amber-100:#FBEFD6;
+  --red-500:#DC4C4C; --red-100:#FBE3E3; --blue-500:#2F7BD1; --blue-100:#E1EDFA;
+
+  /* أسماء دلالية — Light */
+  --surface-page:var(--pearl-50); --surface-card:var(--pearl-0); --surface-sunken:var(--pearl-100);
+  --surface-inverse:var(--ink-900);
+  --text-primary:var(--ink-900); --text-secondary:var(--ink-500); --text-muted:var(--ink-400);
+  --text-inverse:var(--pearl-50);
+  --border-subtle:var(--ink-100); --border-default:var(--ink-200); --border-strong:var(--ink-300);
+  --brand:var(--ink-900); --brand-hover:var(--ink-800); --brand-contrast:var(--pearl-50);
+  --accent:var(--gold-500); --accent-hover:var(--gold-600); --accent-soft:var(--gold-100); --accent-text:var(--gold-700);
+  --success:var(--green-500); --success-soft:var(--green-100);
+  --warning:var(--amber-500); --warning-soft:var(--amber-100);
+  --danger:var(--red-500); --danger-soft:var(--red-100);
+  --focus-ring:var(--gold-400); --overlay:rgba(14,15,19,.48);
+
+  /* الظلال */
+  --shadow-xs:0 1px 2px rgba(14,15,19,.05);
+  --shadow-sm:0 1px 3px rgba(14,15,19,.06),0 1px 2px rgba(14,15,19,.05);
+  --shadow-md:0 4px 12px rgba(14,15,19,.08);
+  --shadow-lg:0 12px 32px rgba(14,15,19,.12);
+  --shadow-xl:0 24px 60px rgba(14,15,19,.16);
+
+  /* الزوايا */
+  --r-xs:6px; --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px; --r-2xl:36px; --r-full:999px;
+
+  /* الطباعة */
+  --font:"IBM Plex Sans Arabic","SF Arabic","Geeza Pro","Segoe UI","Noto Sans Arabic",Tahoma,system-ui,sans-serif;
+  --f-overline:600 12px/1.35 var(--font);
+  --f-label:500 13px/1.35 var(--font);
+  --f-caption:400 13px/1.4 var(--font);
+  --f-body:400 15px/1.55 var(--font);
+  --f-body-strong:600 15px/1.55 var(--font);
+  --f-subhead:500 18px/1.35 var(--font);
+  --f-heading:600 22px/1.3 var(--font);
+  --f-title:600 28px/1.25 var(--font);
+  --f-display:700 44px/1.15 var(--font);
+
+  /* الحركة */
+  --ease-standard:cubic-bezier(.2,0,0,1); --ease-emphasis:cubic-bezier(.3,0,0,1);
+  --dur-fast:120ms; --dur-normal:200ms; --dur-slow:320ms;
+
+  /* الخلفية (الاستوديو) */
+  --stage:#EDE7DB; --stage-2:#E4DCCB;
+}
+/* ثيم داكن — يعيد تعيين الأسماء الدلالية فقط */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --surface-page:var(--ink-950); --surface-card:var(--ink-900); --surface-sunken:var(--ink-800);
+    --surface-inverse:var(--ink-800);
+    --text-primary:var(--ink-50); --text-secondary:var(--ink-300); --text-muted:var(--ink-400);
+    --text-inverse:var(--ink-950);
+    --border-subtle:var(--ink-800); --border-default:var(--ink-700); --border-strong:var(--ink-600);
+    --brand:var(--pearl-50); --brand-hover:var(--pearl-100); --brand-contrast:var(--ink-950);
+    --accent:var(--gold-400); --accent-hover:var(--gold-300); --accent-soft:rgba(196,160,50,.16); --accent-text:var(--gold-300);
+    --success-soft:rgba(30,158,99,.18); --warning-soft:rgba(214,139,18,.18); --danger-soft:rgba(220,76,76,.18);
+    --overlay:rgba(0,0,0,.62);
+    --shadow-md:0 4px 14px rgba(0,0,0,.5); --shadow-lg:0 16px 40px rgba(0,0,0,.55); --shadow-xl:0 24px 60px rgba(0,0,0,.6);
+    --stage:#111318; --stage-2:#0B0C10;
+  }
+}
+:root[data-theme="dark"]{
+  --surface-page:var(--ink-950); --surface-card:var(--ink-900); --surface-sunken:var(--ink-800);
+  --surface-inverse:var(--ink-800);
+  --text-primary:var(--ink-50); --text-secondary:var(--ink-300); --text-muted:var(--ink-400);
+  --text-inverse:var(--ink-950);
+  --border-subtle:var(--ink-800); --border-default:var(--ink-700); --border-strong:var(--ink-600);
+  --brand:var(--pearl-50); --brand-hover:var(--pearl-100); --brand-contrast:var(--ink-950);
+  --accent:var(--gold-400); --accent-hover:var(--gold-300); --accent-soft:rgba(196,160,50,.16); --accent-text:var(--gold-300);
+  --success-soft:rgba(30,158,99,.18); --warning-soft:rgba(214,139,18,.18); --danger-soft:rgba(220,76,76,.18);
+  --overlay:rgba(0,0,0,.62);
+  --shadow-md:0 4px 14px rgba(0,0,0,.5); --shadow-lg:0 16px 40px rgba(0,0,0,.55); --shadow-xl:0 24px 60px rgba(0,0,0,.6);
+  --stage:#111318; --stage-2:#0B0C10;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font:var(--f-body); color:var(--text-primary);
+  background:
+    radial-gradient(1100px 600px at 50% -10%, rgba(196,160,50,.10), transparent 60%),
+    linear-gradient(160deg,var(--stage),var(--stage-2));
+  min-height:100%;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  padding:26px 14px 40px;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+.stage-cap{display:flex;align-items:center;gap:9px;color:var(--text-secondary);font:var(--f-label)}
+.stage-cap .dot{width:6px;height:6px;border-radius:99px;background:var(--accent)}
+.stage-cap b{color:var(--text-primary);font-weight:600;letter-spacing:.02em}
+
+/* ============ إطار الجهاز ============ */
+.device{
+  width:min(430px,96vw); height:min(880px,90vh);
+  background:var(--surface-page); color:var(--text-primary);
+  border-radius:44px; position:relative; overflow:hidden;
+  box-shadow:var(--shadow-xl), 0 0 0 10px #0c0d11, 0 0 0 12px rgba(255,255,255,.06);
+  display:flex; flex-direction:column;
+  isolation:isolate;
+}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:132px;height:26px;background:#0c0d11;border-radius:0 0 16px 16px;z-index:40}
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:11px 26px 3px;font:var(--f-label);color:var(--text-primary);font-variant-numeric:tabular-nums;z-index:5}
+.statusbar .sb-l{font-weight:600}
+.statusbar .sb-r{display:flex;gap:6px;align-items:center;opacity:.9}
+.statusbar .sb-r .ic{width:15px;height:15px}
+
+/* ============ منطقة الشاشات ============ */
+.viewport{position:relative;flex:1;overflow:hidden}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:var(--surface-page);visibility:hidden;opacity:0;transition:opacity var(--dur-normal) var(--ease-standard)}
+.screen.active{visibility:visible;opacity:1}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 20px calc(84px + 18px);scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+/* أيقونات */
+.ic{width:20px;height:20px;display:inline-block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ============ الرأس ============ */
+.head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 14px}
+.hi .ov{font:var(--f-overline);color:var(--text-muted);letter-spacing:.06em}
+.hi h1{font:var(--f-heading);margin-top:1px}
+.head-actions{display:flex;gap:9px;align-items:center}
+.city{display:inline-flex;align-items:center;gap:6px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-full);padding:8px 12px;font:var(--f-label);color:var(--text-primary);box-shadow:var(--shadow-xs);cursor:pointer}
+.city .ic{width:15px;height:15px;color:var(--accent-text)}
+.city .chev{width:14px;height:14px;color:var(--text-muted)}
+.bell{width:42px;height:42px;border-radius:var(--r-full);background:var(--surface-card);border:1px solid var(--border-subtle);display:grid;place-items:center;box-shadow:var(--shadow-xs);position:relative;cursor:pointer;color:var(--text-primary)}
+.bell::after{content:"";position:absolute;top:10px;inset-inline-end:11px;width:7px;height:7px;border-radius:99px;background:var(--accent);box-shadow:0 0 0 2px var(--surface-card)}
+
+/* ============ لافتة العلامة ============ */
+.brand-hero{position:relative;background:radial-gradient(120% 140% at 85% -20%, #2a2d38, var(--ink-900) 55%);border-radius:var(--r-xl);padding:20px;overflow:hidden;color:#fff;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:16px}
+.brand-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 12% 120%, rgba(196,160,50,.28), transparent 60%);pointer-events:none}
+.brand-hero .txt{flex:1;position:relative;z-index:1}
+.brand-hero .ov{font:var(--f-overline);letter-spacing:.14em;color:var(--gold-300)}
+.brand-hero h2{font:var(--f-title);margin:2px 0 6px;color:#fff}
+.brand-hero p{font:var(--f-caption);color:rgba(255,255,255,.72);max-width:22ch}
+.brand-hero .cta{margin-top:13px;display:inline-flex;align-items:center;gap:7px;background:var(--gold-500);color:var(--ink-950);border:none;border-radius:var(--r-full);padding:9px 15px;font:var(--f-label);font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(196,160,50,.35)}
+.brand-hero .cta .ic{width:15px;height:15px;stroke-width:2}
+
+/* ميدالية اللوقو */
+.medallion{--s:78px;width:var(--s);height:var(--s);border-radius:50%;position:relative;flex:none;display:grid;place-items:center;
+  background:conic-gradient(from 210deg,#7a5f16,#e7d289,#c4a032,#f4e6b0,#a8851c,#e7d289,#7a5f16);
+  box-shadow:0 8px 22px rgba(0,0,0,.4),inset 0 1px 1px rgba(255,255,255,.5);animation:float 5.5s var(--ease-standard) infinite}
+.medallion .disc{width:76%;height:76%;border-radius:50%;background:radial-gradient(120% 120% at 30% 25%,#31343d,#16181e 70%);display:grid;place-items:center;box-shadow:inset 0 2px 6px rgba(0,0,0,.6),inset 0 -1px 2px rgba(255,255,255,.06)}
+.medallion .mono{font:700 34px/1 var(--font);color:var(--gold-300);text-shadow:0 1px 2px rgba(0,0,0,.5)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* ============ بحث ============ */
+.search{margin:16px 0 6px;display:flex;align-items:center;gap:10px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:0 14px;height:52px;box-shadow:var(--shadow-sm)}
+.search .ic{color:var(--text-muted)}
+.search input{border:none;outline:none;background:none;flex:1;font:var(--f-body);color:var(--text-primary)}
+.search input::placeholder{color:var(--text-muted)}
+.search .mic{width:34px;height:34px;border-radius:var(--r-sm);background:var(--accent-soft);display:grid;place-items:center;color:var(--accent-text)}
+.search .mic .ic{width:16px;height:16px}
+
+/* ============ عناوين الأقسام ============ */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 12px}
+.sec-head h3{font:var(--f-subhead);font-weight:600}
+.sec-head a{font:var(--f-label);color:var(--accent-text);text-decoration:none;cursor:pointer}
+
+/* شرائح التصنيف */
+.chips{display:flex;gap:9px;overflow-x:auto;padding:2px 0 4px;margin:2px -20px 0;padding-inline:20px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 15px;border-radius:var(--r-full);background:var(--surface-card);border:1px solid var(--border-subtle);font:var(--f-label);color:var(--text-secondary);cursor:pointer;transition:all var(--dur-fast) var(--ease-standard)}
+.chip .ic{width:16px;height:16px}
+.chip[aria-selected="true"]{background:var(--brand);color:var(--brand-contrast);border-color:var(--brand)}
+
+/* ============ بطاقات الصالونات المميّزة ============ */
+.rail{display:flex;gap:14px;overflow-x:auto;margin:0 -20px;padding:4px 20px 6px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.sal-card{flex:none;width:246px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform var(--dur-fast) var(--ease-standard),box-shadow var(--dur-normal)}
+.sal-card:active{transform:scale(.985)}
+.sal-cover{height:124px;position:relative;display:flex;align-items:flex-start;justify-content:space-between;padding:11px}
+.cover-a{background:linear-gradient(135deg,#20232c,#3a2f18)}
+.cover-b{background:linear-gradient(135deg,#3a2f18,#6b5518)}
+.cover-c{background:linear-gradient(135deg,#243027,#3a2f18)}
+.cover-d{background:linear-gradient(135deg,#2b2540,#3a2f18)}
+.cover-e{background:linear-gradient(135deg,#2e2630,#5a4a52)}
+.cover-f{background:linear-gradient(135deg,#382a2a,#6b5518)}
+.pill{display:inline-flex;align-items:center;gap:5px;background:rgba(14,15,19,.5);backdrop-filter:blur(6px);color:#fff;border-radius:var(--r-full);padding:5px 10px;font:var(--f-overline)}
+.pill .ic{width:13px;height:13px;color:var(--gold-300);fill:var(--gold-300);stroke:none}
+.fav{width:32px;height:32px;border-radius:var(--r-full);background:rgba(255,255,255,.14);backdrop-filter:blur(6px);display:grid;place-items:center;color:#fff;border:none;cursor:pointer}
+.fav .ic{width:16px;height:16px}
+.sal-body{padding:12px 13px 14px}
+.sal-body .nm{font:var(--f-body-strong)}
+.sal-body .meta{display:flex;align-items:center;gap:6px;margin-top:3px;color:var(--text-muted);font:var(--f-caption)}
+.sal-body .meta .ic{width:13px;height:13px}
+.sal-foot{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+.tag{background:var(--surface-sunken);border-radius:var(--r-sm);padding:4px 9px;font:var(--f-overline);color:var(--text-secondary)}
+.price{font:var(--f-label);color:var(--text-primary)}
+.price b{color:var(--accent-text)}
+
+/* بطاقات قريبة (قائمة رأسية) */
+.list{display:flex;flex-direction:column;gap:12px}
+.near{display:flex;gap:13px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:12px;box-shadow:var(--shadow-xs);cursor:pointer;transition:transform var(--dur-fast)}
+.near:active{transform:scale(.99)}
+.near .thumb{width:66px;height:66px;border-radius:var(--r-md);flex:none;display:grid;place-items:center;color:var(--gold-300)}
+.near .thumb .ic{width:26px;height:26px}
+.near .info{flex:1;min-width:0}
+.near .info .nm{font:var(--f-body-strong)}
+.near .info .row{display:flex;align-items:center;gap:5px;color:var(--text-muted);font:var(--f-caption);margin-top:3px}
+.near .info .row .ic{width:13px;height:13px}
+.near .info .tags{display:flex;gap:6px;margin-top:8px}
+.near .end{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex:none}
+.rate{display:inline-flex;align-items:center;gap:4px;font:var(--f-label);color:var(--text-primary)}
+.rate .ic{width:14px;height:14px;fill:var(--accent);stroke:none}
+
+/* ============ شريط التنقّل السفلي ============ */
+.tabbar{position:absolute;bottom:0;inset-inline:0;height:78px;background:color-mix(in srgb,var(--surface-card) 88%,transparent);backdrop-filter:blur(16px);border-top:1px solid var(--border-subtle);display:flex;justify-content:space-around;align-items:center;padding-bottom:8px;z-index:20}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:var(--text-muted);font:var(--f-overline);cursor:pointer;flex:1;padding-top:8px}
+.tab .ic{width:23px;height:23px}
+.tab[aria-selected="true"]{color:var(--text-primary)}
+.tab[aria-selected="true"] .ic{color:var(--accent-text)}
+.tab .badge{position:relative}
+.tab[aria-selected="true"] .badge::after{content:"";position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:99px;background:var(--accent)}
+
+/* ============ تفاصيل الصالون ============ */
+.detail-cover{height:210px;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:14px;color:#fff;flex:none}
+.detail-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(14,15,19,.85),transparent 62%);z-index:0}
+.dc-top{display:flex;justify-content:space-between;z-index:1}
+.round-btn{width:40px;height:40px;border-radius:var(--r-full);background:rgba(14,15,19,.42);backdrop-filter:blur(6px);border:none;display:grid;place-items:center;color:#fff;cursor:pointer}
+.dc-info{z-index:1;position:relative}
+.dc-info .nm{font:var(--f-title);color:#fff}
+.dc-info .sub{display:flex;align-items:center;gap:12px;margin-top:6px;color:rgba(255,255,255,.85);font:var(--f-caption)}
+.dc-info .sub span{display:inline-flex;align-items:center;gap:5px}
+.dc-info .sub .ic{width:14px;height:14px}
+.dc-info .sub .ic.star{fill:var(--gold-400);stroke:none}
+.badge-open{display:inline-flex;align-items:center;gap:5px;background:var(--success);color:#fff;border-radius:var(--r-full);padding:4px 10px;font:var(--f-overline);align-self:flex-start;z-index:1}
+
+.subtabs{display:flex;gap:6px;padding:14px 20px 4px;position:sticky;top:0;background:var(--surface-page);z-index:6}
+.subtab{flex:1;text-align:center;padding:10px;border-radius:var(--r-md);font:var(--f-label);color:var(--text-secondary);background:var(--surface-sunken);cursor:pointer;border:1px solid transparent}
+.subtab[aria-selected="true"]{background:var(--surface-card);color:var(--text-primary);border-color:var(--border-subtle);box-shadow:var(--shadow-xs)}
+
+.svc{display:flex;align-items:center;gap:12px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-md);padding:13px;margin-bottom:10px}
+.svc .svc-i{width:44px;height:44px;border-radius:var(--r-sm);background:var(--accent-soft);display:grid;place-items:center;color:var(--accent-text);flex:none}
+.svc .svc-i .ic{width:20px;height:20px}
+.svc .svc-t{flex:1}
+.svc .svc-t .nm{font:var(--f-body-strong)}
+.svc .svc-t .du{display:flex;align-items:center;gap:5px;color:var(--text-muted);font:var(--f-caption);margin-top:2px}
+.svc .svc-t .du .ic{width:13px;height:13px}
+.svc .pr{font:var(--f-label);color:var(--text-primary);white-space:nowrap}
+.svc .pr b{font-size:16px}
+.add{width:34px;height:34px;border-radius:var(--r-sm);border:1px solid var(--border-default);background:var(--surface-card);display:grid;place-items:center;color:var(--text-primary);cursor:pointer;flex:none;transition:all var(--dur-fast)}
+.add .ic{width:18px;height:18px}
+.svc[data-on="1"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.svc[data-on="1"] .add{background:var(--accent);border-color:var(--accent);color:var(--ink-950)}
+
+.barbers{display:flex;gap:14px;overflow-x:auto;margin:2px -20px 0;padding:6px 20px;scrollbar-width:none}
+.barbers::-webkit-scrollbar{display:none}
+.barber{flex:none;display:flex;flex-direction:column;align-items:center;gap:7px;width:64px;cursor:pointer}
+.barber .av{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--ink-700),var(--ink-900));display:grid;place-items:center;color:var(--gold-300);font:var(--f-body-strong);border:2px solid transparent}
+.barber[aria-selected="true"] .av{border-color:var(--accent)}
+.barber .bn{font:var(--f-caption);color:var(--text-secondary)}
+.barber .br{display:inline-flex;align-items:center;gap:3px;font:var(--f-overline);color:var(--text-muted)}
+.barber .br .ic{width:11px;height:11px;fill:var(--accent);stroke:none}
+
+/* شريط سفلي ثابت للحجز */
+.book-bar{position:absolute;bottom:0;inset-inline:0;background:var(--surface-card);border-top:1px solid var(--border-subtle);padding:14px 20px calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:14px;z-index:30;box-shadow:0 -6px 20px rgba(14,15,19,.06)}
+.book-bar .total{flex:1}
+.book-bar .total .lb{font:var(--f-overline);color:var(--text-muted)}
+.book-bar .total .vl{font:var(--f-subhead);font-weight:600}
+.book-bar .total .vl b{color:var(--accent-text)}
+
+/* أزرار */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font:var(--f-body-strong);border-radius:var(--r-md);padding:0 20px;height:52px;transition:opacity var(--dur-fast),transform var(--dur-fast)}
+.btn:active{transform:scale(.985)}
+.btn-brand{background:var(--brand);color:var(--brand-contrast)}
+.btn-gold{background:var(--accent);color:var(--ink-950);box-shadow:0 8px 20px rgba(196,160,50,.3)}
+.btn-block{width:100%}
+.btn:disabled{opacity:.45;box-shadow:none;cursor:default}
+.btn .ic{width:19px;height:19px;stroke-width:2}
+
+/* ============ الشيت السفلي ============ */
+.sheet-wrap{position:absolute;inset:0;z-index:60;display:none}
+.sheet-wrap.open{display:block}
+.sheet-scrim{position:absolute;inset:0;background:var(--overlay);opacity:0;transition:opacity var(--dur-normal)}
+.sheet-wrap.open .sheet-scrim{opacity:1}
+.sheet{position:absolute;inset-inline:0;bottom:0;background:var(--surface-card);border-radius:var(--r-2xl) var(--r-2xl) 0 0;padding:10px 20px calc(22px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform var(--dur-slow) var(--ease-emphasis);max-height:88%;overflow-y:auto;scrollbar-width:none}
+.sheet::-webkit-scrollbar{display:none}
+.sheet-wrap.open .sheet{transform:translateY(0)}
+.handle{width:40px;height:4px;border-radius:99px;background:var(--border-strong);margin:0 auto 16px}
+.sheet h3{font:var(--f-heading);margin-bottom:3px}
+.sheet .lead{font:var(--f-caption);color:var(--text-secondary);margin-bottom:18px}
+.field{margin-bottom:18px}
+.field .fl{font:var(--f-label);color:var(--text-secondary);margin-bottom:9px;display:block}
+.opts{display:flex;gap:9px;flex-wrap:wrap}
+.opt{padding:10px 14px;border-radius:var(--r-md);border:1px solid var(--border-default);background:var(--surface-card);font:var(--f-label);color:var(--text-primary);cursor:pointer;transition:all var(--dur-fast);display:inline-flex;align-items:center;gap:7px}
+.opt .ic{width:16px;height:16px}
+.opt[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text)}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.slot{padding:11px 0;text-align:center;border-radius:var(--r-sm);border:1px solid var(--border-default);background:var(--surface-card);font:var(--f-label);cursor:pointer;font-variant-numeric:tabular-nums}
+.slot[aria-selected="true"]{border-color:var(--accent);background:var(--accent);color:var(--ink-950)}
+.slot[disabled]{opacity:.4;cursor:default;text-decoration:line-through}
+.sum{background:var(--surface-sunken);border-radius:var(--r-md);padding:14px;margin:4px 0 18px}
+.sum .r{display:flex;justify-content:space-between;font:var(--f-caption);color:var(--text-secondary);padding:4px 0}
+.sum .r.tot{border-top:1px dashed var(--border-strong);margin-top:6px;padding-top:10px;font:var(--f-body-strong);color:var(--text-primary)}
+.sum .r.tot b{color:var(--accent-text);font-size:17px}
+
+/* ============ حجوزاتي ============ */
+.seg{display:flex;background:var(--surface-sunken);border-radius:var(--r-md);padding:4px;margin:6px 0 16px}
+.seg button{flex:1;border:none;background:none;padding:10px;border-radius:var(--r-sm);font:var(--f-label);color:var(--text-secondary);cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--surface-card);color:var(--text-primary);box-shadow:var(--shadow-xs);font-weight:600}
+.bk{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:15px;margin-bottom:12px;box-shadow:var(--shadow-xs)}
+.bk .top{display:flex;justify-content:space-between;align-items:flex-start}
+.bk .top .nm{font:var(--f-body-strong)}
+.bk .top .svc-n{font:var(--f-caption);color:var(--text-secondary);margin-top:2px}
+.st{font:var(--f-overline);padding:5px 10px;border-radius:var(--r-full);white-space:nowrap}
+.st.ok{background:var(--success-soft);color:var(--success)}
+.st.done{background:var(--surface-sunken);color:var(--text-secondary)}
+.bk .when{display:flex;gap:16px;margin-top:13px;padding-top:13px;border-top:1px solid var(--border-subtle);color:var(--text-secondary);font:var(--f-caption)}
+.bk .when span{display:inline-flex;align-items:center;gap:6px}
+.bk .when .ic{width:14px;height:14px;color:var(--accent-text)}
+.bk .act{display:flex;gap:10px;margin-top:13px}
+.bk .act .btn{height:42px;flex:1;font:var(--f-label);font-weight:600}
+.btn-ghost{background:var(--surface-sunken);color:var(--text-primary)}
+.stars{display:flex;gap:4px;margin-top:12px}
+.stars .ic{width:20px;height:20px;fill:var(--accent);stroke:none}
+.stars .ic.off{fill:var(--border-strong)}
+
+/* ============ الملف ============ */
+.prof-head{display:flex;align-items:center;gap:14px;padding:10px 0 18px}
+.prof-head .av{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--ink-700),var(--ink-900));display:grid;place-items:center;color:var(--gold-300);font:var(--f-heading)}
+.prof-head .nm{font:var(--f-subhead);font-weight:600}
+.prof-head .ph{font:var(--f-caption);color:var(--text-muted);margin-top:2px;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.wallet{background:radial-gradient(120% 140% at 85% -20%, #2a2d38, var(--ink-900) 60%);border-radius:var(--r-xl);padding:18px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);margin-bottom:20px}
+.wallet::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 90% at 10% 120%,rgba(196,160,50,.3),transparent 55%)}
+.wallet .rowt{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.wallet .ov{font:var(--f-overline);letter-spacing:.1em;color:var(--gold-300)}
+.wallet .bal{font:var(--f-title);margin-top:8px;position:relative;z-index:1}
+.wallet .bal small{font:var(--f-label);color:rgba(255,255,255,.7)}
+.wallet .ic-w{width:32px;height:32px;color:var(--gold-300)}
+.menu{background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-xs)}
+.mi{display:flex;align-items:center;gap:13px;padding:15px;cursor:pointer;border-bottom:1px solid var(--border-subtle)}
+.mi:last-child{border-bottom:none}
+.mi .mic{width:38px;height:38px;border-radius:var(--r-sm);background:var(--surface-sunken);display:grid;place-items:center;color:var(--accent-text);flex:none}
+.mi .mic .ic{width:19px;height:19px}
+.mi .ml{flex:1}
+.mi .ml .t{font:var(--f-body-strong)}
+.mi .ml .s{font:var(--f-caption);color:var(--text-muted);margin-top:1px}
+.mi .chev{width:18px;height:18px;color:var(--text-muted)}
+.mi.danger .mic{background:var(--danger-soft);color:var(--danger)}
+.mi.danger .t{color:var(--danger)}
+
+/* ============ التوست ============ */
+.toast{position:absolute;bottom:96px;inset-inline:20px;background:var(--ink-900);color:#fff;border-radius:var(--r-md);padding:14px 16px;display:flex;align-items:center;gap:11px;box-shadow:var(--shadow-lg);transform:translateY(20px);opacity:0;transition:all var(--dur-normal) var(--ease-emphasis);z-index:70;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast .tk{width:26px;height:26px;border-radius:50%;background:var(--success);display:grid;place-items:center;flex:none}
+.toast .tk .ic{width:15px;height:15px;stroke:#fff;stroke-width:2.4}
+.toast .tt{font:var(--f-label);font-weight:600}
+.toast .ts{font:var(--f-overline);color:rgba(255,255,255,.7);margin-top:1px}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:1ms!important}
+}
+</style>
+
+<!-- سبرايت الأيقونات -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.86-4.25 4.14 1 5.86L12 17.9l-5.25 2.76 1-5.86L3.5 9.66l5.9-.86L12 3.5Z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.35-7-9.5A3.5 3.5 0 0 1 12 7a3.5 3.5 0 0 1 7 3.5C19 15.65 12 20 12 20Z"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8 8 20 18M8 16 20 6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M4 9h16M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="m8.5 11 6-4M8.5 13l6 4"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v6M12 15v6M3 12h6M15 12h6" stroke-width="1.5"/><path d="M12 8l1.3 2.7L16 12l-2.7 1.3L12 16l-1.3-2.7L8 12l2.7-1.3Z"/></symbol>
+  <symbol id="i-home-svc" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-4h4v4"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M16 14h2"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7M12 16.5v.01"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h4v16h-4"/><path d="M4 12h11M11 8l4 4-4 4"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M4 18v-3M9 18v-6M14 18v-9M19 18V6" stroke-width="2"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M4 8a13 13 0 0 1 16 0M7 12a8 8 0 0 1 10 0M10 15.5a3 3 0 0 1 4 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-batt" viewBox="0 0 24 24"><rect x="3" y="8" width="16" height="9" rx="2"/><path d="M21 11v3" stroke-width="2"/><rect x="5" y="10" width="10" height="5" rx="1" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<div class="stage-cap"><span class="dot"></span>تألق · <b>نموذج الواجهة التفاعلي</b></div>
+
+<div class="device">
+  <div class="notch"></div>
+  <div class="statusbar">
+    <div class="sb-l">٩:٤١</div>
+    <div class="sb-r"><svg class="ic"><use href="#i-signal"/></svg><svg class="ic"><use href="#i-wifi"/></svg><svg class="ic"><use href="#i-batt"/></svg></div>
+  </div>
+
+  <div class="viewport">
+
+    <!-- ============ الرئيسية ============ -->
+    <section class="screen active" id="s-home">
+      <div class="scroll">
+        <div class="head">
+          <div class="hi">
+            <div class="ov">مساء الخير 🌙</div>
+            <h1>أهلاً، عبدالله</h1>
+          </div>
+          <div class="head-actions">
+            <button class="city">
+              <svg class="ic"><use href="#i-pin"/></svg>الرياض
+              <svg class="ic chev"><use href="#i-chev-d"/></svg>
+            </button>
+            <button class="bell"><svg class="ic"><use href="#i-bell"/></svg></button>
+          </div>
+        </div>
+
+        <div class="brand-hero">
+          <div class="medallion"><div class="disc"><span class="mono">ت</span></div></div>
+          <div class="txt">
+            <div class="ov">TALLUQ</div>
+            <h2>تألق</h2>
+            <p>احجز موعدك في أرقى الصالونات بلمسة تلمع</p>
+            <button class="cta" data-goto="salon"><svg class="ic"><use href="#i-spark"/></svg>ابدأ الحجز</button>
+          </div>
+        </div>
+
+        <div class="search">
+          <svg class="ic"><use href="#i-search"/></svg>
+          <input placeholder="ابحث عن صالون أو خدمة" aria-label="بحث">
+          <span class="mic"><svg class="ic"><use href="#i-mic"/></svg></span>
+        </div>
+
+        <div class="chips" role="tablist">
+          <button class="chip" aria-selected="true"><svg class="ic"><use href="#i-spark"/></svg>الكل</button>
+          <button class="chip"><svg class="ic"><use href="#i-scissors"/></svg>رجال</button>
+          <button class="chip"><svg class="ic"><use href="#i-star"/></svg>نساء</button>
+          <button class="chip"><svg class="ic"><use href="#i-user"/></svg>أطفال</button>
+          <button class="chip"><svg class="ic"><use href="#i-home-svc"/></svg>منزلي</button>
+        </div>
+
+        <div class="sec-head"><h3>صالونات مميّزة</h3><a>عرض الكل</a></div>
+        <div class="rail">
+          <div class="sal-card" data-goto="salon">
+            <div class="sal-cover cover-a">
+              <span class="pill"><svg class="ic"><use href="#i-star"/></svg>٤٫٩</span>
+              <button class="fav"><svg class="ic"><use href="#i-heart"/></svg></button>
+            </div>
+            <div class="sal-body">
+              <div class="nm">غرفة الحبر</div>
+              <div class="meta"><svg class="ic"><use href="#i-pin"/></svg>حي النخيل · ١٫٢ كم</div>
+              <div class="sal-foot"><span class="tag">رجال</span><span class="price">من <b>٦٠ ر.س</b></span></div>
+            </div>
+          </div>
+          <div class="sal-card" data-goto="salon">
+            <div class="sal-cover cover-e">
+              <span class="pill"><svg class="ic"><use href="#i-star"/></svg>٥٫٠</span>
+              <button class="fav"><svg class="ic"><use href="#i-heart"/></svg></button>
+            </div>
+            <div class="sal-body">
+              <div class="nm">دار اللؤلؤة</div>
+              <div class="meta"><svg class="ic"><use href="#i-pin"/></svg>حي الياسمين · ٢٫٤ كم</div>
+              <div class="sal-foot"><span class="tag">نساء</span><span class="price">من <b>٩٠ ر.س</b></span></div>
+            </div>
+          </div>
+          <div class="sal-card" data-goto="salon">
+            <div class="sal-cover cover-b">
+              <span class="pill"><svg class="ic"><use href="#i-star"/></svg>٤٫٨</span>
+              <button class="fav"><svg class="ic"><use href="#i-heart"/></svg></button>
+            </div>
+            <div class="sal-body">
+              <div class="nm">الشفرة الذهبية</div>
+              <div class="meta"><svg class="ic"><use href="#i-home-svc"/></svg>يوفّر خدمة منزلية</div>
+              <div class="sal-foot"><span class="tag">رجال</span><span class="price">من <b>٧٥ ر.س</b></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-head"><h3>قريبة منك</h3><a>الخريطة</a></div>
+        <div class="list">
+          <div class="near" data-goto="salon">
+            <div class="thumb cover-c"><svg class="ic"><use href="#i-scissors"/></svg></div>
+            <div class="info">
+              <div class="nm">قصّات التاج</div>
+              <div class="row"><svg class="ic"><use href="#i-pin"/></svg>حي الملقا · ٣٫١ كم · مفتوح</div>
+              <div class="tags"><span class="tag">عائلي</span><span class="tag">من ٥٥ ر.س</span></div>
+            </div>
+            <div class="end">
+              <span class="rate"><svg class="ic"><use href="#i-star"/></svg>٤٫٧</span>
+            </div>
+          </div>
+          <div class="near" data-goto="salon">
+            <div class="thumb cover-f"><svg class="ic"><use href="#i-scissors"/></svg></div>
+            <div class="info">
+              <div class="nm">المقص الصغير</div>
+              <div class="row"><svg class="ic"><use href="#i-pin"/></svg>حي العقيق · ٤٫٠ كم · مفتوح</div>
+              <div class="tags"><span class="tag">أطفال</span><span class="tag">من ٤٥ ر.س</span></div>
+            </div>
+            <div class="end">
+              <span class="rate"><svg class="ic"><use href="#i-star"/></svg>٤٫٩</span>
+            </div>
+          </div>
+          <div class="near" data-goto="salon">
+            <div class="thumb cover-e"><svg class="ic"><use href="#i-scissors"/></svg></div>
+            <div class="info">
+              <div class="nm">ميزون لومي</div>
+              <div class="row"><svg class="ic"><use href="#i-home-svc"/></svg>خدمة منزلية · حسب الطلب</div>
+              <div class="tags"><span class="tag">نساء</span><span class="tag">من ١٢٠ ر.س</span></div>
+            </div>
+            <div class="end">
+              <span class="rate"><svg class="ic"><use href="#i-star"/></svg>٤٫٨</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ تفاصيل الصالون ============ -->
+    <section class="screen" id="s-salon">
+      <div class="scroll" style="padding:0 0 calc(90px + 18px)">
+        <div class="detail-cover cover-a">
+          <div class="dc-top">
+            <button class="round-btn" data-goto="home"><svg class="ic"><use href="#i-chev-l"/></svg></button>
+            <div style="display:flex;gap:9px">
+              <button class="round-btn"><svg class="ic"><use href="#i-share"/></svg></button>
+              <button class="round-btn"><svg class="ic"><use href="#i-heart"/></svg></button>
+            </div>
+          </div>
+          <span class="badge-open"><svg class="ic" style="width:12px;height:12px"><use href="#i-clock"/></svg>مفتوح حتى ١١ م</span>
+          <div class="dc-info">
+            <div class="nm">غرفة الحبر</div>
+            <div class="sub">
+              <span><svg class="ic star"><use href="#i-star"/></svg>٤٫٩ · ٣١٢ تقييم</span>
+              <span><svg class="ic"><use href="#i-pin"/></svg>حي النخيل، الرياض</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subtabs">
+          <div class="subtab" aria-selected="true">الخدمات</div>
+          <div class="subtab">الحلاقون</div>
+          <div class="subtab">التقييمات</div>
+        </div>
+
+        <div style="padding:6px 20px 0">
+          <div class="svc" data-price="60" data-name="قصة كلاسيكية">
+            <div class="svc-i"><svg class="ic"><use href="#i-scissors"/></svg></div>
+            <div class="svc-t"><div class="nm">قصة كلاسيكية</div><div class="du"><svg class="ic"><use href="#i-clock"/></svg>٣٠ دقيقة</div></div>
+            <div class="pr"><b>٦٠</b> ر.س</div>
+            <button class="add" aria-label="إضافة"><svg class="ic"><use href="#i-plus"/></svg></button>
+          </div>
+          <div class="svc" data-price="75" data-name="فيد">
+            <div class="svc-i"><svg class="ic"><use href="#i-scissors"/></svg></div>
+            <div class="svc-t"><div class="nm">فيد (تدرّج)</div><div class="du"><svg class="ic"><use href="#i-clock"/></svg>٤٥ دقيقة</div></div>
+            <div class="pr"><b>٧٥</b> ر.س</div>
+            <button class="add" aria-label="إضافة"><svg class="ic"><use href="#i-plus"/></svg></button>
+          </div>
+          <div class="svc" data-price="45" data-name="تشذيب لحية">
+            <div class="svc-i"><svg class="ic"><use href="#i-spark"/></svg></div>
+            <div class="svc-t"><div class="nm">تشذيب لحية</div><div class="du"><svg class="ic"><use href="#i-clock"/></svg>٢٠ دقيقة</div></div>
+            <div class="pr"><b>٤٥</b> ر.س</div>
+            <button class="add" aria-label="إضافة"><svg class="ic"><use href="#i-plus"/></svg></button>
+          </div>
+          <div class="svc" data-price="55" data-name="فوطة ساخنة">
+            <div class="svc-i"><svg class="ic"><use href="#i-spark"/></svg></div>
+            <div class="svc-t"><div class="nm">حلاقة بفوطة ساخنة</div><div class="du"><svg class="ic"><use href="#i-clock"/></svg>٢٥ دقيقة</div></div>
+            <div class="pr"><b>٥٥</b> ر.س</div>
+            <button class="add" aria-label="إضافة"><svg class="ic"><use href="#i-plus"/></svg></button>
+          </div>
+          <div class="svc" data-price="95" data-name="شعر + لحية">
+            <div class="svc-i"><svg class="ic"><use href="#i-scissors"/></svg></div>
+            <div class="svc-t"><div class="nm">شعر + لحية</div><div class="du"><svg class="ic"><use href="#i-clock"/></svg>٦٠ دقيقة</div></div>
+            <div class="pr"><b>٩٥</b> ر.س</div>
+            <button class="add" aria-label="إضافة"><svg class="ic"><use href="#i-plus"/></svg></button>
+          </div>
+
+          <div class="sec-head" style="margin-bottom:6px"><h3 style="font:var(--f-subhead);font-weight:600">حلاقونا</h3></div>
+          <div class="barbers">
+            <div class="barber" aria-selected="true"><div class="av">ف</div><div class="bn">فهد</div><div class="br"><svg class="ic"><use href="#i-star"/></svg>٤٫٩</div></div>
+            <div class="barber"><div class="av">س</div><div class="bn">سلطان</div><div class="br"><svg class="ic"><use href="#i-star"/></svg>٤٫٨</div></div>
+            <div class="barber"><div class="av">م</div><div class="bn">ماجد</div><div class="br"><svg class="ic"><use href="#i-star"/></svg>٤٫٧</div></div>
+            <div class="barber"><div class="av">ر</div><div class="bn">راكان</div><div class="br"><svg class="ic"><use href="#i-star"/></svg>٥٫٠</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-bar">
+        <div class="total">
+          <div class="lb" id="sel-count">لم تختر خدمة بعد</div>
+          <div class="vl">الإجمالي <b id="sel-total">٠ ر.س</b></div>
+        </div>
+        <button class="btn btn-gold" id="to-sheet" disabled><svg class="ic"><use href="#i-cal"/></svg>متابعة الحجز</button>
+      </div>
+    </section>
+
+    <!-- ============ حجوزاتي ============ -->
+    <section class="screen" id="s-bookings">
+      <div class="scroll">
+        <div class="head"><div class="hi"><div class="ov">مواعيدك</div><h1>حجوزاتي</h1></div></div>
+        <div class="seg">
+          <button aria-selected="true" data-seg="up">قادمة</button>
+          <button data-seg="done">مكتملة</button>
+        </div>
+
+        <div data-list="up">
+          <div class="bk">
+            <div class="top">
+              <div><div class="nm">غرفة الحبر</div><div class="svc-n">قصة كلاسيكية · مع فهد</div></div>
+              <span class="st ok">مؤكّد</span>
+            </div>
+            <div class="when">
+              <span><svg class="ic"><use href="#i-cal"/></svg>الأحد، ١٤ يوليو</span>
+              <span><svg class="ic"><use href="#i-clock"/></svg>٦:٣٠ م</span>
+            </div>
+            <div class="act">
+              <button class="btn btn-ghost">تعديل</button>
+              <button class="btn btn-ghost" data-goto="salon">عرض الصالون</button>
+            </div>
+          </div>
+          <div class="bk">
+            <div class="top">
+              <div><div class="nm">ميزون لومي</div><div class="svc-n">جلسة عناية · خدمة منزلية</div></div>
+              <span class="st ok">بانتظار التأكيد</span>
+            </div>
+            <div class="when">
+              <span><svg class="ic"><use href="#i-cal"/></svg>الثلاثاء، ١٦ يوليو</span>
+              <span><svg class="ic"><use href="#i-home-svc"/></svg>المنزل</span>
+            </div>
+            <div class="act">
+              <button class="btn btn-ghost">إلغاء</button>
+              <button class="btn btn-ghost">تفاصيل</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-list="done" hidden>
+          <div class="bk">
+            <div class="top">
+              <div><div class="nm">دار اللؤلؤة</div><div class="svc-n">صبغة + قص · مع نورة</div></div>
+              <span class="st done">مكتمل</span>
+            </div>
+            <div class="when">
+              <span><svg class="ic"><use href="#i-cal"/></svg>الجمعة، ٤ يوليو</span>
+              <span><svg class="ic"><use href="#i-clock"/></svg>٥:٠٠ م</span>
+            </div>
+            <div class="stars" title="قيّم تجربتك">
+              <svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic off"><use href="#i-star"/></svg>
+            </div>
+          </div>
+          <div class="bk">
+            <div class="top">
+              <div><div class="nm">قصّات التاج</div><div class="svc-n">قص أطفال · مع ماجد</div></div>
+              <span class="st done">مكتمل</span>
+            </div>
+            <div class="when">
+              <span><svg class="ic"><use href="#i-cal"/></svg>الأحد، ٢٩ يونيو</span>
+              <span><svg class="ic"><use href="#i-clock"/></svg>١١:٠٠ ص</span>
+            </div>
+            <div class="act"><button class="btn btn-ghost" data-goto="salon">احجز مرة أخرى</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ الملف ============ -->
+    <section class="screen" id="s-profile">
+      <div class="scroll">
+        <div class="head"><div class="hi"><div class="ov">حسابي</div><h1>الملف الشخصي</h1></div></div>
+        <div class="prof-head">
+          <div class="av">ع</div>
+          <div><div class="nm">عبدالله العتيبي</div><div class="ph">+966 50 123 4567</div></div>
+        </div>
+
+        <div class="wallet">
+          <div class="rowt"><span class="ov">محفظة تألق</span><svg class="ic ic-w"><use href="#i-wallet"/></svg></div>
+          <div class="bal">١٢٠٫٠٠ <small>ر.س</small></div>
+        </div>
+
+        <div class="menu">
+          <div class="mi"><div class="mic"><svg class="ic"><use href="#i-card"/></svg></div><div class="ml"><div class="t">طرق الدفع</div><div class="s">مدى ·· ٤٢٤٢ · افتراضية</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mi"><div class="mic"><svg class="ic"><use href="#i-pin"/></svg></div><div class="ml"><div class="t">المدينة</div><div class="s">الرياض</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mi"><div class="mic"><svg class="ic"><use href="#i-bell"/></svg></div><div class="ml"><div class="t">الإشعارات</div><div class="s">تذكير المواعيد والعروض</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mi"><div class="mic"><svg class="ic"><use href="#i-help"/></svg></div><div class="ml"><div class="t">المساعدة والدعم</div><div class="s">الأسئلة الشائعة · تواصل معنا</div></div><svg class="ic chev"><use href="#i-chev-l"/></svg></div>
+          <div class="mi danger"><div class="mic"><svg class="ic"><use href="#i-out"/></svg></div><div class="ml"><div class="t">تسجيل الخروج</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ شريط التنقّل ============ -->
+    <nav class="tabbar">
+      <button class="tab" aria-selected="true" data-tab="home"><span class="badge"><svg class="ic"><use href="#i-home"/></svg></span>الرئيسية</button>
+      <button class="tab" data-tab="bookings"><span class="badge"><svg class="ic"><use href="#i-cal"/></svg></span>حجوزاتي</button>
+      <button class="tab" data-tab="profile"><span class="badge"><svg class="ic"><use href="#i-user"/></svg></span>الملف</button>
+    </nav>
+
+    <!-- ============ الشيت السفلي ============ -->
+    <div class="sheet-wrap" id="sheet">
+      <div class="sheet-scrim" data-close></div>
+      <div class="sheet">
+        <div class="handle"></div>
+        <h3>إتمام الحجز</h3>
+        <p class="lead">غرفة الحبر · اختر التفاصيل ثم أكّد موعدك</p>
+
+        <div class="field">
+          <label class="fl">الحلاق</label>
+          <div class="opts">
+            <button class="opt" aria-selected="true"><svg class="ic"><use href="#i-user"/></svg>فهد</button>
+            <button class="opt"><svg class="ic"><use href="#i-user"/></svg>سلطان</button>
+            <button class="opt"><svg class="ic"><use href="#i-user"/></svg>ماجد</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="fl">اليوم</label>
+          <div class="opts">
+            <button class="opt" aria-selected="true">اليوم</button>
+            <button class="opt">غدًا</button>
+            <button class="opt">الأحد ١٤</button>
+            <button class="opt">الإثنين ١٥</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="fl">الوقت</label>
+          <div class="slots">
+            <button class="slot" disabled>٤:٠٠</button>
+            <button class="slot">٥:٠٠</button>
+            <button class="slot" aria-selected="true">٦:٣٠</button>
+            <button class="slot">٧:٠٠</button>
+            <button class="slot">٨:٣٠</button>
+            <button class="slot">٩:٠٠</button>
+            <button class="slot">٩:٣٠</button>
+            <button class="slot">١٠:٠٠</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="fl">مكان الخدمة</label>
+          <div class="opts">
+            <button class="opt" aria-selected="true"><svg class="ic"><use href="#i-scissors"/></svg>في الصالون</button>
+            <button class="opt"><svg class="ic"><use href="#i-home-svc"/></svg>خدمة منزلية <span style="color:var(--text-muted)">+٣٠</span></button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="fl">طريقة الدفع</label>
+          <div class="opts">
+            <button class="opt" aria-selected="true"><svg class="ic"><use href="#i-card"/></svg>مدى ·· ٤٢٤٢</button>
+            <button class="opt"> Pay</button>
+            <button class="opt"><svg class="ic"><use href="#i-wallet"/></svg>محفظة تألق</button>
+          </div>
+        </div>
+
+        <div class="sum">
+          <div class="r"><span id="sum-svc">الخدمات</span><span id="sum-svc-v">٠ ر.س</span></div>
+          <div class="r"><span>رسوم الخدمة</span><span>٥ ر.س</span></div>
+          <div class="r tot"><span>الإجمالي</span><b id="sum-total">٥ ر.س</b></div>
+        </div>
+
+        <button class="btn btn-gold btn-block" id="confirm"><svg class="ic"><use href="#i-check"/></svg>تأكيد الحجز</button>
+      </div>
+    </div>
+
+    <!-- التوست -->
+    <div class="toast" id="toast">
+      <span class="tk"><svg class="ic"><use href="#i-check"/></svg></span>
+      <div><div class="tt">تم تأكيد حجزك ✦</div><div class="ts">غرفة الحبر · الأحد ٦:٣٠ م</div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s);
+  const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const ar=n=>n.toLocaleString('ar-EG');
+
+  // --- تبديل الشاشات ---
+  const screens={home:'s-home',salon:'s-salon',bookings:'s-bookings',profile:'s-profile'};
+  function show(name){
+    $$('.screen').forEach(s=>s.classList.remove('active'));
+    $('#'+screens[name]).classList.add('active');
+    // مزامنة شريط التنقّل (تفاصيل الصالون تُبقي تبويب الرئيسية نشطًا بصريًا)
+    const tabName = (name==='salon')?'home':name;
+    $$('.tab').forEach(t=>t.setAttribute('aria-selected', t.dataset.tab===tabName));
+    $('.viewport').scrollTop=0;
+    $$('.scroll').forEach(sc=>sc.scrollTop=0);
+  }
+  $$('.tab').forEach(t=>t.addEventListener('click',()=>show(t.dataset.tab)));
+  document.addEventListener('click',e=>{
+    const g=e.target.closest('[data-goto]');
+    if(g) show(g.dataset.goto);
+  });
+
+  // --- شرائح عامة (تحديد واحد داخل مجموعة) ---
+  function single(container){
+    $$('button',container).forEach(b=>b.addEventListener('click',()=>{
+      $$('[aria-selected]',container).forEach(x=>x.setAttribute('aria-selected','false'));
+      b.setAttribute('aria-selected','true');
+    }));
+  }
+  single($('.chips'));
+  $$('.opts').forEach(single);
+  single($('.subtabs'));
+  single($('.barbers'));
+  // شرائح الوقت (تخطّي المعطّلة)
+  $$('.slot').forEach(b=>b.addEventListener('click',()=>{
+    if(b.disabled)return;
+    $$('.slot').forEach(x=>x.setAttribute('aria-selected','false'));
+    b.setAttribute('aria-selected','true');
+  }));
+
+  // --- اختيار الخدمات + حساب الإجمالي ---
+  const fee=5;
+  function total(){
+    let t=0,c=0;
+    $$('.svc[data-on="1"]').forEach(s=>{t+=+s.dataset.price;c++;});
+    return {t,c};
+  }
+  function refresh(){
+    const {t,c}=total();
+    $('#sel-total').textContent=ar(t)+' ر.س';
+    $('#sel-count').textContent=c?`${ar(c)} خدمة مختارة`:'لم تختر خدمة بعد';
+    $('#to-sheet').disabled=!c;
+    $('#sum-svc').textContent=`الخدمات (${ar(c)})`;
+    $('#sum-svc-v').textContent=ar(t)+' ر.س';
+    $('#sum-total').textContent=ar(t+ (c?fee:0))+' ر.س';
+  }
+  $$('.svc .add').forEach(btn=>btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const svc=btn.closest('.svc');
+    svc.dataset.on = svc.dataset.on==='1'?'0':'1';
+    refresh();
+  }));
+
+  // --- الشيت السفلي ---
+  const sheet=$('#sheet');
+  function openSheet(){ if(!total().c)return; sheet.classList.add('open'); }
+  function closeSheet(){ sheet.classList.remove('open'); }
+  $('#to-sheet').addEventListener('click',openSheet);
+  $$('[data-close]').forEach(x=>x.addEventListener('click',closeSheet));
+
+  // --- التأكيد + التوست ---
+  const toast=$('#toast');
+  $('#confirm').addEventListener('click',()=>{
+    closeSheet();
+    const t=$('.slot[aria-selected="true"]');
+    const fields=$$('.sheet .field');
+    const day=fields[1] && fields[1].querySelector('.opt[aria-selected="true"]');
+    toast.querySelector('.ts').textContent='غرفة الحبر · '+(day?day.textContent.trim():'اليوم')+' '+(t?t.textContent:'٦:٣٠')+' م';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),2600);
+    // إعادة تعيين الاختيار بعد التأكيد
+    setTimeout(()=>{ $$('.svc').forEach(s=>s.dataset.on='0'); refresh(); show('bookings'); },900);
+  });
+
+  // --- تبويب حجوزاتي ---
+  $$('.seg button').forEach(b=>b.addEventListener('click',()=>{
+    $$('.seg button').forEach(x=>x.setAttribute('aria-selected','false'));
+    b.setAttribute('aria-selected','true');
+    $('[data-list="up"]').hidden = b.dataset.seg!=='up';
+    $('[data-list="done"]').hidden = b.dataset.seg!=='done';
+  }));
+
+  refresh();
+})();
+</script>
