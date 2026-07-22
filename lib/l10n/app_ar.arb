@@ -1,0 +1,12 @@
+{
+  "@@locale": "ar",
+  "appName": "تألق",
+  "appTagline": "حجز مواعيد الحلاقة والتجميل للرجال والنساء والأطفال",
+  "splashLoading": "جارٍ التحميل…",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "themeLight": "فاتح",
+  "themeDark": "داكن",
+  "themePinkLight": "وردي فاتح",
+  "themePinkDark": "وردي داكن"
+}

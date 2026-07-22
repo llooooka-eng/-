@@ -4,70 +4,51 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-This is the design and source-of-record for **تألق / Talluq** (npm package `taalaq`) — an Arabic-first (RTL) mobile app for booking barber/salon appointments (men, women, kids, and at-home service) in Saudi Arabia.
+**تألق / Talluq** — a Flutter mobile app for booking barber/salon, beauty, and massage/spa appointments (men, women, kids, and at-home service) for the Saudi market. Long-term SaaS project targeting App Store and Google Play.
 
-The repo currently contains two artifacts rather than a live checked-out app:
+Two supporting artifacts predate the Flutter app: `Talluq-Design.md` (the design-system spec — color/typography/spacing tokens, the authoritative visual reference) and `files.zip` (an **obsolete React Native/Expo prototype** — superseded by this Flutter app; do not build on it).
 
-- **`Talluq-Design.md`** — the complete design system specification (color/typography/spacing tokens, motion, components, screen flow, persistence model, sample data). This is the authoritative reference for any UI work.
-- **`files.zip`** — the actual React Native / Expo source files (services, hooks, contexts, screens, UI kit, theme). There is **no extracted source tree or root `package.json`** in the repo yet; the app code lives inside this archive.
+## Environment
 
-Before writing or reviewing app code, unzip `files.zip` (e.g. `unzip -o files.zip -d src-preview/`) to read the real implementation. When scaffolding the app for real, the `@/…` import alias used throughout the code maps to the project source root.
-
-> Note on naming: the design doc romanizes the name as **Talluq** ("to shine/تألق"), while the package is `taalaq` and a few file header comments say "تأنق". These refer to the same product — don't treat them as separate apps.
-
-## Tech stack
-
-Expo SDK 57 · Expo Router 57 (file-based routing) · React 19.2 · React Native 0.86 · TypeScript · Supabase (`@supabase/supabase-js`) · Moyasar payments (`react-native-moyasar-sdk`) · IBM Plex Sans Arabic fonts (`@expo-google-fonts`).
+Flutter is not preinstalled in fresh sessions. The SDK used is **Flutter 3.44.7 / Dart 3.12.2**, installed at `/opt/flutter` (add `/opt/flutter/bin` to `PATH`; `~/.bashrc` and `~/.profile` already export it). Commands run as root, so Flutter prints a harmless "running as root" warning — ignore it.
 
 ## Commands
 
-These come from the packaged `package.json` and run from the project root **once the app source is extracted/scaffolded** (install deps first with `npm install`):
-
 ```bash
-npm run start      # expo start — dev server / Metro bundler
-npm run android    # expo run:android — native Android build
-npm run ios        # expo run:ios — native iOS build
-npm run lint       # expo lint
+flutter pub get      # fetch deps; also regenerates l10n (pubspec has generate: true)
+flutter gen-l10n     # regenerate localization after editing lib/l10n/*.arb
+flutter analyze      # static analysis — must stay at "No issues found!"
+flutter test         # run all tests
+flutter test test/core/theme/theme_controller_test.dart   # run a single test file
+flutter run          # launch the app (needs a device/emulator)
 ```
 
-There is no test runner configured in the packaged manifest. Apple Pay and the Moyasar native SDK require a **development build** — they do not work in Expo Go.
+## Architecture — the rules
 
-## Architecture — the important invariants
+Full details in `docs/ARCHITECTURE.md`. The essentials:
 
-### Money is server-authoritative; the client never computes or writes amounts
+- **Clean Architecture + Feature-First.** Each feature lives under `lib/features/<feature>/` and splits into `domain` (entities, repository contracts, use cases) / `data` (repository impls, Supabase data sources, models) / `presentation` (pages, widgets, Riverpod view models). Dependencies point inward: Presentation → Domain ← Data. The splash feature currently has only a `presentation/` layer because it has no data/domain yet — add layers when a feature needs them, don't create empty ones.
+- **State: Riverpod only.** No other state-management library.
+- **Navigation: GoRouter only**, exposed via `routerProvider` (`lib/core/router/`). Route paths/names are centralized in `app_routes.dart`.
+- **Backend: Supabase/PostgreSQL with Row Level Security.** Access `SupabaseClient` only through `supabaseClientProvider` from repositories — never call `Supabase.instance` elsewhere.
+- **MVVM:** presentation holds no business logic; state lives in Notifier/AsyncNotifier view models.
 
-This is the single most important rule in the codebase. Study it before touching payments, refunds, or the wallet:
+### App startup flow
 
-- **All monetary values are integers in halalas** (1 SAR = 100 halalas). Only `formatSAR` / `formatSignedAmount` in `lib/format.ts` turn them into displayable ريال strings. Never do ad-hoc arithmetic on amounts in components.
-- **Payment amount is created server-side.** `bookingService.createPaymentIntent` calls the `create-payment` Edge Function, which computes the amount from the booking row and returns a `PaymentIntent` (amount, currency, publishable key, metadata). The client passes only `booking_id` + `payment_type` (`full` | `deposit`) — it never sends an amount. `MoyasarPaymentSheet` feeds those intent values straight into Moyasar's `PaymentConfig`.
-- **The wallet is read-only from the client.** `walletService` only reads balance/transactions and subscribes to Realtime updates. Credits/debits are posted exclusively by the server-side `process_cancellation` DB function. RLS scopes every wallet/booking query to the owner.
-- **Refunds go through the server too.** `previewRefund` calls the `evaluate_refund` RPC (policy + time-based percentage) so the user sees what they'll get back before confirming; `cancelBooking` calls the `refund-payment` Edge Function, which does the wallet credit and/or Moyasar bank reversal.
-- **Two lines of defense after checkout.** Webhooks confirm payment authoritatively but can lag, so `pollPaymentStatus` polls `payment_transactions.status` until `paid`/`failed` (or timeout) once the user returns from the Moyasar sheet.
+`main.dart` → `bootstrap()` (`lib/bootstrap.dart`): loads `.env` (optional), initializes Supabase **only if** `SUPABASE_URL` + `SUPABASE_ANON_KEY` are set (so the app runs during early dev without them), creates `SharedPreferences`, then `runApp` inside a `ProviderScope` that **overrides `sharedPreferencesProvider`** with the ready instance. `lib/app.dart` (`TalluqApp`) wires `MaterialApp.router` to theme + locale + router providers.
 
-### Supabase backend contract
+### Themes — four of them
 
-App code depends on this backend shape existing:
+`AppFlavor{classic, pink}` × `ThemeMode{light, dark}` = Light / Dark / Pink Light / Pink Dark. `themeControllerProvider` holds flavor + mode and persists both to `SharedPreferences`; changing either rebuilds `MaterialApp` instantly. `AppTheme` (`lib/core/theme/`) builds Material 3 `ThemeData` via `ColorScheme.fromSeed` with surfaces tuned to Talluq's identity (pearl/gold classic, rose pink). Color tokens are in `app_colors.dart` — never hardcode colors.
 
-- **Edge Functions:** `create-payment`, `refund-payment` — invoked via `supabase.functions.invoke`.
-- **RPCs / DB functions:** `evaluate_refund`, `process_cancellation`.
-- **Tables:** `bookings`, `wallets`, `wallet_transactions`, `payment_transactions` (+ RLS restricting rows to the authenticated owner).
-- **Realtime:** replication must be enabled on `bookings` and `wallets` for `subscribeToBookingStatus` / `subscribeToWallet` to fire.
+### Localization — Arabic (RTL) + English (LTR), no restart
 
-`AuthContext` wraps the app, holds the Supabase session, and reacts to `onAuthStateChange`. Types shared across services live in `@/types/database`.
+`localeControllerProvider` holds the current `Locale` and persists it; changing it flips direction and strings **without restarting the app**. Arabic is the default. Strings live in `lib/l10n/app_ar.arb` + `app_en.arb` — add keys to **both**, then `flutter gen-l10n`. The generated `AppLocalizations` (`lib/l10n/app_localizations*.dart`) is git-ignored and regenerated on `pub get`. Typography rule from the design spec: **never apply `letterSpacing` to Arabic text** — it breaks glyph joining (`app_typography.dart` zeroes it).
 
-### App shell & routing
+### Environment & secrets
 
-- Expo Router with file-based routes. Root `_layout.tsx` **forces RTL** (`I18nManager.forceRTL(true)` — requires one app restart to fully apply on first launch), blocks render until IBM Plex Sans Arabic fonts load, then wraps everything in `SafeAreaProvider` → `AuthProvider`.
-- Tab bar (`(tabs)/_layout.tsx`): الرئيسية / حجوزاتي / المحفظة / حسابي.
-- The confirm/pay screen (`booking/confirm.tsx`) is a state machine over phases `summary → paying → processing → done | failed`.
+`.env` values are read **only** through `AppConfig` (`lib/core/config/app_config.dart`) — nothing else touches `dotenv`. `.env` is committed with empty placeholders (it's a required asset); fill the Supabase URL and the **publishable/anon** key locally. Never put the `service_role` key in the client `.env`; the real protection is RLS.
 
-### Design system usage
+## Working style for this project
 
-- Do **not** hardcode colors, spacing, radii, or font sizes. Import tokens from `constants/theme.ts` (`colors`, `spacing`, `radius`, `fontFamily`, `fontSize`).
-- Use the shared primitives in `components/ui.tsx` (`Screen`, `AppText`, `Card`, `Button`, `IconBadge`, `EmptyState`, `Divider`) rather than raw `Text`/`View`. `AppText` applies the correct Arabic font; `Button` has three variants: `primary` (gold), `dark` (ink), `outline`.
-- Typography/RTL rule from the spec: **never apply `letter-spacing`/tracking to Arabic text** — it breaks glyph joining. Tracking tokens are for Latin/numerals only.
-- The gold accent is used sparingly (ratings, selection, highlights, the logo medallion) — not for large fills. Note `Talluq-Design.md` documents a fuller token set (Pearl/Ink/Gold scales, dark theme, semantic names) than the condensed runtime `theme.ts`; treat the design doc as the intended target and `theme.ts` as the current implementation.
-
-### Dates & locale
-
-Format dates with the helpers in `lib/format.ts`, which use `Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-latn", …)` — **Gregorian calendar with Latin numerals**, Arabic month names. `formatRelative` gives اليوم/أمس/قبل n أيام.
+The user runs this in **explicit phases** — do not build ahead. Before a phase: explain what will be built and list the files; after: verify `flutter analyze` is clean and `flutter test` passes before declaring it done. Don't add a library unless necessary, don't create unused files, don't duplicate code. Any new feature ships with basic tests where appropriate.

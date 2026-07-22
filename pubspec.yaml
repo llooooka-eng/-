@@ -1,0 +1,45 @@
+name: talluq
+description: "تألق — منصة حجز مواعيد صالونات الحلاقة والتجميل والمساج للسوق السعودي."
+publish_to: 'none'
+
+# النسخة (versionName+versionCode). عدّلها عند كل إصدار للمتجرين.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # التوطين الرسمي (عربي/إنجليزي) عبر gen-l10n.
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # إدارة الحالة — Riverpod فقط.
+  flutter_riverpod: ^2.6.1
+  # التنقّل — GoRouter فقط.
+  go_router: ^16.1.0
+  # الواجهة الخلفية — Supabase.
+  supabase_flutter: ^2.8.0
+  # ملفات البيئة (.env).
+  flutter_dotenv: ^5.2.1
+  # حفظ تفضيلات المستخدم (الثيم واللغة) محليًا.
+  shared_preferences: ^2.3.3
+  # أدوات التنسيق والتوطين.
+  intl: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  # توليد كود التوطين تلقائيًا من ملفات ARB.
+  generate: true
+
+  # ملفات البيئة تُحمّل كأصل عبر flutter_dotenv.
+  assets:
+    - .env

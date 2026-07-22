@@ -1,0 +1,27 @@
+{
+  "@@locale": "en",
+  "appName": "Talluq",
+  "@appName": {
+    "description": "The application name."
+  },
+  "appTagline": "Book grooming & beauty appointments for men, women, and kids",
+  "@appTagline": {
+    "description": "Short marketing tagline shown under the logo."
+  },
+  "splashLoading": "Loading…",
+  "@splashLoading": {
+    "description": "Loading label shown on the splash screen."
+  },
+  "languageArabic": "العربية",
+  "@languageArabic": {
+    "description": "Arabic language name (always shown in Arabic)."
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language name."
+  },
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themePinkLight": "Pink Light",
+  "themePinkDark": "Pink Dark"
+}
